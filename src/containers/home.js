@@ -67,7 +67,9 @@ class Home extends React.Component {
           )
         })
         .then(res => res.json())
-        .then(json => { this.setState({accountType: json.account.rank})
+        .then(json => {
+console.log(json)
+          this.setState({accountType: json.account.rank})
         })
     }
   }
@@ -79,15 +81,16 @@ class Home extends React.Component {
           <AdminPage />
         </div>
       )
-    }
-    return(
-      <div>
-      <button onClick={() => {console.log(this.state)}}>
-      test
-      </button>
+    } else {
+      return(
+        <div>
+        <button onClick={() => {console.log(this.state)}}>
+        test
+        </button>
         hi
-      </div>
-    )
+        </div>
+      )
+    }
   }
 }
 
