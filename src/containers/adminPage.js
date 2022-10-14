@@ -1,4 +1,5 @@
 import React from 'react';
+import CreateAccount from './createAccount';
 
 class AdminPage extends React.Component {
 
@@ -9,10 +10,9 @@ class AdminPage extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     return(
-      <div>
-      ADMIN PAGE
-      </div>
+      <CreateAccount />
     )
   }
 }
