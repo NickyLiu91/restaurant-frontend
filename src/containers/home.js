@@ -49,7 +49,9 @@ class Home extends React.Component {
   // }
 
   componentDidMount() {
-     let jwt = localStorage.getItem('jwt')
+    console.log(this.state)
+    let jwt = localStorage.getItem('jwt')
+
         if (jwt) {
           fetch(`http://localhost:3000/api/login`, {
             method: 'POST',
@@ -61,24 +63,27 @@ class Home extends React.Component {
             body: JSON.stringify(
               {
                 account: {
-                name: "Admin Account",
-                password: "aaa"
+                // name: 'Admin Account',
+                // password: 'aaa'
+                name: 'Account 2',
+                password: 'bbb'
               }
             }
           )
         })
         .then(res => res.json())
         .then(json => {
-          this.setState({accountType: json.account})
+          console.log(json)
+          this.setState({account: json.account})
         })
     }
   }
 
   render() {
-    if (this.state.account.rank == 'admin') {
+    if (Object.keys(this.state.account).length != 0) {
       return(
         <div>
-          <AdminPage />
+          <AdminPage account={this.state.account}/>
         </div>
       )
     } else {

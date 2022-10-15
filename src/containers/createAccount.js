@@ -3,6 +3,7 @@ import React from 'react';
 class CreateAccount extends React.Component {
 
   state = {
+    account: this.props.account,
     managerName: '',
     tableName: '',
     restaurantName: '',
@@ -58,7 +59,7 @@ class CreateAccount extends React.Component {
           name: this.state.tableName,
           rank: 'table',
           password: this.state.tablePassword,
-          restaurant_id: this.state.restaurant_id
+          restaurant_id: this.state.account.rank == 'admin' ? this.state.restaurant_id : this.state.account.restaurants[0].id
        }
      }
     )
@@ -91,11 +92,15 @@ class CreateAccount extends React.Component {
  //   }
  // }
 
+
   render() {
-    if (this.state.rank == 'manager') {
+    if (Object.keys(this.state.account).length != 0) {
+    // if (this.state.rank == 'admin') {
       // if (this.state.createType == 'account') {
         return(
           <div>
+              <button onClick={() => {console.log(this.state.account.restaurants[0])}}>test</button>
+            {this.state.account.rank == 'admin' ?
             <div>
               <h1>Create a manager account!</h1>
               Account name: <input id="managerName" type="text" value={this.state.managerName} onChange={event => this.handleStuff(event)}/>
@@ -111,7 +116,7 @@ class CreateAccount extends React.Component {
               <br/>
               <br/>
               <button onClick={this.createManager}>Create Account</button>
-            </div>
+            </div> : null }
             <br/>
             <br/>
             <div>
@@ -122,9 +127,12 @@ class CreateAccount extends React.Component {
               Password: <input id="tablePassword" type="password" value={this.state.tablePassword} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
+              {this.state.account.rank == 'admin' ?
+              <p>
               Restaurant_id: <input id="restaurant_id" type="text" value={this.state.restaurant_id} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
+              </p> : null }
               <button onClick={this.createTable}>Create Table</button>
             </div>
             <br/>
@@ -144,6 +152,12 @@ class CreateAccount extends React.Component {
             </div>
           </div>
         )
+    } else {
+      return(
+        <div>
+        temp
+        </div>
+      )
     }
 
   }

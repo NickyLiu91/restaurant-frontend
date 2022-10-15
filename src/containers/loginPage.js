@@ -30,7 +30,8 @@ class LoginPage extends React.Component {
     )
   })
   .then(res => res.json())
-  .then(json => {localStorage.setItem('jwt', json.jwt)})
+  .then(json => {
+    localStorage.setItem('jwt', json.jwt)})
   }
 
   render() {
