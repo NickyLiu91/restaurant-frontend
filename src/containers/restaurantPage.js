@@ -59,7 +59,7 @@ class RestaurantPage extends React.Component {
         return (
           <div>
             <p>Name: {item.name}</p>
-            <p>Price: {item.price}</p>
+            <p>Price: {parseFloat(item.price)}</p>
             {this.state.guest ? <button onClick={() => {this.addToOrder(item)}}>Add To Order</button> : null}
           </div>
         )
@@ -68,35 +68,13 @@ class RestaurantPage extends React.Component {
   }
 
   addToOrder = (item) => {
-    console.log(item)
     // let ordersCopy = this.state.orders
     let newOrderList = this.state.currentOrder
     // console.log(this.state.restaurant)
-    newOrderList = [...newOrderList, item]
+    newOrderList = [...newOrderList, {name: item.name, price: parseFloat(item.price)}]
     this.setState({
       currentOrder: newOrderList
     })
-    // fetch(`http://localhost:3000/api/restaurants/${this.state.restaurant.id}`, {
-    //    method: 'PUT',
-    //    headers: {
-    //       'Content-Type': 'application/json',
-    //       'Accept': 'application/json',
-    //       Authorization: `Bearer ${localStorage.getItem('jwt')}`
-    //    },
-    //    body: JSON.stringify(
-    //   //  {
-    //   //    account: {
-    //   //       name: "Account 3",
-    //   //       email: "test@gmail.com",
-    //   //       phone: 7777777,
-    //   //       rank: "manager",
-    //   //       password: "ccc"
-    //   //    }
-    //   //  }
-    //   )
-    // })
-    // .then(res => res.json())
-    // .then(json => {console.log(json.orders)})
   }
 
   generateOrderItems = (order) => {
@@ -124,7 +102,7 @@ class RestaurantPage extends React.Component {
           <div>
             <p>Order ID: {order.id}</p>
             <p>location: {order.location}</p>
-            <p>{this.generateOrderItems(order)}</p>
+            {this.generateOrderItems(order)}
             <p>Total Price: {order.totalPrice}</p>
             <br/>
             <br/>
@@ -140,8 +118,38 @@ class RestaurantPage extends React.Component {
       })
   }
 
+  submitOrder = () => {
+
+    let currentOrderCopy = this.state.currentOrder
+    let currentPrice = 0
+
+    currentOrderCopy.forEach(item => {currentPrice += parseFloat(item.price)})
+    console.log(this.state.currentOrder)
+
+    fetch(`http://localhost:3000/api/orders`, {
+       method: 'POST',
+       headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+       },
+       body: JSON.stringify(
+       {
+         order: {
+            orderItems: currentOrderCopy,
+            restaurant_id: this.state.restaurant.id,
+            location: "online",
+            totalPrice: currentPrice
+         }
+       }
+      )
+    })
+    .then(res => res.json())
+    .then(json => {console.log(json)})
+  }
+
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     if (Object.keys(this.state.restaurant).length != 0 && !this.state.guest) {
       return(
         <div>
@@ -162,9 +170,11 @@ class RestaurantPage extends React.Component {
       return(
         <div>
           <button onClick={() => {this.swapType()}}>SWAPPY</button>
+          <button onClick={() => {console.log(this.state)}}>STATE</button>
           <div>
             <h1>MENU</h1>
             {this.generateMenu()}
+            <button onClick={() => {this.submitOrder()}}>Submit Order</button>
           </div>
         </div>
       )
