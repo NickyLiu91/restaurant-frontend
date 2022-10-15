@@ -104,7 +104,7 @@ class CreateAccount extends React.Component {
               E-mail: <input id="email" type="text" value={this.state.email} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
-              Password: <input id="managerPassword" type="password" value={this.state.password} onChange={event => this.handleStuff(event)}/>
+              Password: <input id="managerPassword" type="password" value={this.state.managerPassword} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
               Phone: <input id="phone" type="text" value={this.state.phone} onChange={event => this.handleStuff(event)}/>

@@ -1,10 +1,11 @@
 import React from 'react';
 import AdminPage from './adminPage';
+import LoginPage from './loginPage';
 
 class Home extends React.Component {
 
   state = {
-    accountType: '',
+    account: {},
     restaurant: {},
     items: {}
   }
@@ -68,14 +69,13 @@ class Home extends React.Component {
         })
         .then(res => res.json())
         .then(json => {
-console.log(json)
-          this.setState({accountType: json.account.rank})
+          this.setState({accountType: json.account})
         })
     }
   }
 
   render() {
-    if (this.state.accountType == 'admin') {
+    if (this.state.account.rank == 'admin') {
       return(
         <div>
           <AdminPage />
@@ -84,10 +84,7 @@ console.log(json)
     } else {
       return(
         <div>
-        <button onClick={() => {console.log(this.state)}}>
-        test
-        </button>
-        hi
+          <LoginPage />
         </div>
       )
     }
