@@ -1,13 +1,15 @@
 import React from 'react';
 import AdminPage from './adminPage';
 import LoginPage from './loginPage';
+import RestaurantPage from './restaurantPage';
 
 class Home extends React.Component {
 
   state = {
     account: {},
     restaurant: {},
-    items: {}
+    items: {},
+    display: 'adminPage'
   }
 
   // componentDidMount() {
@@ -79,16 +81,36 @@ class Home extends React.Component {
     }
   }
 
+  swapDisplay = () => {
+    if (this.state.display == 'adminPage') {
+      this.setState({
+        display: 'restaurant'
+      })
+    } else {
+      this.setState({
+        display: 'adminPage'
+      })
+    }
+  }
+
   render() {
-    if (Object.keys(this.state.account).length != 0) {
+    if (this.state.display == 'adminPage' && Object.keys(this.state.account).length != 0) {
       return(
         <div>
+          <button onClick={() => {this.swapDisplay()}}>SWAP DISPLAY</button>
           <AdminPage account={this.state.account}/>
+        </div>
+      )
+    } else if (this.state.display == 'restaurant' && Object.keys(this.state.account).length != 0) {
+      return(
+        <div>
+          <RestaurantPage />
         </div>
       )
     } else {
       return(
         <div>
+          <button onClick={() => {this.swapDisplay()}}>SWAP DISPLAY</button>
           <LoginPage />
         </div>
       )

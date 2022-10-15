@@ -137,6 +137,7 @@ class CreateAccount extends React.Component {
             </div>
             <br/>
             <br/>
+            {this.state.account.rank == 'admin' ?
             <div>
               <h1>Create a restaurant!!</h1>
               Restaurant name: <input id="restaurantName" type="text" value={this.state.restaurantName} onChange={event => this.handleStuff(event)}/>
@@ -150,6 +151,7 @@ class CreateAccount extends React.Component {
               <br/>
               <button onClick={this.createRestaurant}>Create Table</button>
             </div>
+            : null }
           </div>
         )
     } else {
