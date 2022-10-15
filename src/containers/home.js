@@ -104,7 +104,7 @@ class Home extends React.Component {
     } else if (this.state.display == 'restaurant' && Object.keys(this.state.account).length != 0) {
       return(
         <div>
-          <RestaurantPage />
+          <RestaurantPage account={this.state.account}/>
         </div>
       )
     } else {
