@@ -7,7 +7,8 @@ class RestaurantPage extends React.Component {
     restaurant: {},
     menu: [],
     orders: [],
-    guest: false
+    guest: false,
+    currentOrder: []
   }
 
   componentDidMount() {
@@ -59,10 +60,43 @@ class RestaurantPage extends React.Component {
           <div>
             <p>Name: {item.name}</p>
             <p>Price: {item.price}</p>
+            {this.state.guest ? <button onClick={() => {this.addToOrder(item)}}>Add To Order</button> : null}
           </div>
         )
       }
     )
+  }
+
+  addToOrder = (item) => {
+    console.log(item)
+    // let ordersCopy = this.state.orders
+    let newOrderList = this.state.currentOrder
+    // console.log(this.state.restaurant)
+    newOrderList = [...newOrderList, item]
+    this.setState({
+      currentOrder: newOrderList
+    })
+    // fetch(`http://localhost:3000/api/restaurants/${this.state.restaurant.id}`, {
+    //    method: 'PUT',
+    //    headers: {
+    //       'Content-Type': 'application/json',
+    //       'Accept': 'application/json',
+    //       Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    //    },
+    //    body: JSON.stringify(
+    //   //  {
+    //   //    account: {
+    //   //       name: "Account 3",
+    //   //       email: "test@gmail.com",
+    //   //       phone: 7777777,
+    //   //       rank: "manager",
+    //   //       password: "ccc"
+    //   //    }
+    //   //  }
+    //   )
+    // })
+    // .then(res => res.json())
+    // .then(json => {console.log(json.orders)})
   }
 
   generateOrderItems = (order) => {
@@ -111,13 +145,13 @@ class RestaurantPage extends React.Component {
     if (Object.keys(this.state.restaurant).length != 0 && !this.state.guest) {
       return(
         <div>
-        <button onClick={() => {this.swapType()}}>SWAPPY</button>
+          <button onClick={() => {this.swapType()}}>SWAPPY</button>
           <div>
-          <h1>MENU</h1>
-          {this.generateMenu()}
+            <h1>MENU</h1>
+            {this.generateMenu()}
           </div>
-          <br/>
-          <br/>
+            <br/>
+            <br/>
           <div>
           <h1>List of ORDERS</h1>
             {this.generateOrders()}
@@ -127,7 +161,11 @@ class RestaurantPage extends React.Component {
     } else if (this.state.guest) {
       return(
         <div>
-        guest
+          <button onClick={() => {this.swapType()}}>SWAPPY</button>
+          <div>
+            <h1>MENU</h1>
+            {this.generateMenu()}
+          </div>
         </div>
       )
 
