@@ -51,34 +51,30 @@ class Home extends React.Component {
   // }
 
   componentDidMount() {
-    console.log(this.state)
-    let jwt = localStorage.getItem('jwt')
 
-        if (jwt) {
-          fetch(`http://localhost:3000/api/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              Authorization: `Bearer ${jwt}`
-            },
-            body: JSON.stringify(
-              {
-                account: {
-                // name: 'Admin Account',
-                // password: 'aaa'
-                name: 'Account 2',
-                password: 'bbb'
-              }
-            }
-          )
-        })
-        .then(res => res.json())
-        .then(json => {
-          console.log(json)
-          this.setState({account: json.account})
-        })
+    if (localStorage.getItem('jwt')) {
+       this.fetchCurrentUser()
     }
+  }
+
+  fetchCurrentUser = () => {
+    console.log("???")
+    fetch('http://localhost:3000/api/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      }
+    })
+    .then(r => r.json())
+    .then(json => {
+      console.log(json)
+    })
+  }
+
+  changeAccount = (input) => {
+    this.setState({
+      account: input
+    })
   }
 
   swapDisplay = () => {
@@ -111,7 +107,7 @@ class Home extends React.Component {
       return(
         <div>
           <button onClick={() => {this.swapDisplay()}}>SWAP DISPLAY</button>
-          <LoginPage />
+          <LoginPage changeAccount={this.changeAccount}/>
         </div>
       )
     }
