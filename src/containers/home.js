@@ -2,6 +2,7 @@ import React from 'react';
 import AdminPage from './adminPage';
 import LoginPage from './loginPage';
 import RestaurantPage from './restaurantPage';
+import {connect} from 'react-redux'
 
 class Home extends React.Component {
 
@@ -51,24 +52,34 @@ class Home extends React.Component {
   // }
 
   componentDidMount() {
-
-    if (localStorage.getItem('jwt')) {
-       this.fetchCurrentUser()
-    }
-  }
-
-  fetchCurrentUser = () => {
-    console.log("???")
-    fetch('http://localhost:3000/api/profile', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`
-      }
-    })
-    .then(r => r.json())
-    .then(json => {
-      console.log(json)
-    })
+    console.log("hi")
+  //   let jwt = localStorage.getItem('jwt')
+  //
+  //       if (jwt) {
+  //         fetch(`http://localhost:3000/api/login`, {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json',
+  //             Authorization: `Bearer ${jwt}`
+  //           },
+  //           body: JSON.stringify(
+  //             {
+  //               account: {
+  //               // name: 'Admin Account',
+  //               // password: 'aaa'
+  //               name: 'Account 2',
+  //               password: 'bbb'
+  //             }
+  //           }
+  //         )
+  //       })
+  //       .then(res => res.json())
+  //       .then(json => {
+  //         console.log(json)
+  //         this.setState({account: json.account})
+  //       })
+  //   }
   }
 
   changeAccount = (input) => {
@@ -114,4 +125,17 @@ class Home extends React.Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => {
+  return {
+    account: state.accountChange.account
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home)
