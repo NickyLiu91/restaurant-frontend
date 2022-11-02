@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux'
 
 class LoginPage extends React.Component {
 
@@ -31,6 +32,7 @@ class LoginPage extends React.Component {
   })
   .then(res => res.json())
   .then(json => {
+    console.log(json)
     localStorage.setItem('jwt', json.jwt)
     this.props.changeAccount(json.account)
     })
@@ -52,4 +54,13 @@ class LoginPage extends React.Component {
   }
 }
 
-export default LoginPage
+const mapDispatchToProps = dispatch => {
+  return {
+    changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
+  }
+}
+
+export default connect (
+  null,
+  mapDispatchToProps
+)(LoginPage)

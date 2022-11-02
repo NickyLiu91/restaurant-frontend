@@ -51,36 +51,37 @@ class Home extends React.Component {
   //   }
   // }
 
-  componentDidMount() {
-    console.log("hi")
-    let jwt = localStorage.getItem('jwt')
-
-        if (jwt) {
-          fetch(`http://localhost:3000/api/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              Authorization: `Bearer ${jwt}`
-            },
-            body: JSON.stringify(
-              {
-                account: {
-                // name: 'Admin Account',
-                // password: 'aaa'
-                name: 'Account 2',
-                password: 'bbb'
-              }
-            }
-          )
-        })
-        .then(res => res.json())
-        .then(json => {
-          console.log(json)
-          this.setState({account: json.account})
-        })
-    }
-  }
+  // componentDidMount() {
+  //   let jwt = localStorage.getItem('jwt')
+  //
+  //   if (jwt) {
+  //     fetch(`http://localhost:3000/api/login`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //         Authorization: `Bearer ${jwt}`
+  //       },
+  //       body: JSON.stringify(
+  //         {
+  //           account: {
+  //           // name: 'Admin Account',
+  //           // password: 'aaa'
+  //           name: 'Account 2',
+  //           password: 'bbb'
+  //           }
+  //         }
+  //       )
+  //     })
+  //     .then(res => res.json())
+  //     .then(json => {
+  //       console.log(json)
+  //       this.setState({
+  //         account: json.account
+  //       }, () => {this.props.changeAccount(json.account)})
+  //     })
+  //   }
+  // }
 
   changeAccount = (input) => {
     this.setState({
@@ -88,27 +89,23 @@ class Home extends React.Component {
     })
   }
 
-  swapDisplay = () => {
-    if (this.state.display == 'adminPage') {
-      this.setState({
-        display: 'restaurant'
-      })
-    } else {
-      this.setState({
-        display: 'adminPage'
-      })
-    }
+  logOut = () => {
+    this.props.changeAccount({})
+    localStorage.clear()
   }
 
   render() {
-    if (this.state.display == 'adminPage' && Object.keys(this.state.account).length != 0) {
+    console.log(this.props.account)
+    if (Object.keys(this.props.account).length != 0 && this.props.account.rank == 'admin') {
+      console.log("ADMIN!")
       return(
         <div>
-          <button onClick={() => {this.swapDisplay()}}>SWAP DISPLAY</button>
+          <button onClick={() => {this.logOut()}}>Log Out</button>
           <AdminPage account={this.state.account}/>
         </div>
       )
-    } else if (this.state.display == 'restaurant' && Object.keys(this.state.account).length != 0) {
+    } else if (Object.keys(this.props.account).length != 0) {
+      console.log("Norm!")
       return(
         <div>
           <RestaurantPage account={this.state.account}/>
