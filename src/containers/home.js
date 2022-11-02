@@ -53,33 +53,33 @@ class Home extends React.Component {
 
   componentDidMount() {
     console.log("hi")
-  //   let jwt = localStorage.getItem('jwt')
-  //
-  //       if (jwt) {
-  //         fetch(`http://localhost:3000/api/login`, {
-  //           method: 'POST',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             'Accept': 'application/json',
-  //             Authorization: `Bearer ${jwt}`
-  //           },
-  //           body: JSON.stringify(
-  //             {
-  //               account: {
-  //               // name: 'Admin Account',
-  //               // password: 'aaa'
-  //               name: 'Account 2',
-  //               password: 'bbb'
-  //             }
-  //           }
-  //         )
-  //       })
-  //       .then(res => res.json())
-  //       .then(json => {
-  //         console.log(json)
-  //         this.setState({account: json.account})
-  //       })
-  //   }
+    let jwt = localStorage.getItem('jwt')
+
+        if (jwt) {
+          fetch(`http://localhost:3000/api/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              Authorization: `Bearer ${jwt}`
+            },
+            body: JSON.stringify(
+              {
+                account: {
+                // name: 'Admin Account',
+                // password: 'aaa'
+                name: 'Account 2',
+                password: 'bbb'
+              }
+            }
+          )
+        })
+        .then(res => res.json())
+        .then(json => {
+          console.log(json)
+          this.setState({account: json.account})
+        })
+    }
   }
 
   changeAccount = (input) => {
@@ -127,12 +127,14 @@ class Home extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    account: state.accountChange.account
+    account: state.accountChanger.account
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
+  return {
+    changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
+  }
 }
 
 export default connect(
