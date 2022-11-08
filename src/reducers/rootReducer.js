@@ -9,6 +9,16 @@ function accountChanger(state = {account: {}}, action) {
    }
 }
 
+function pageChanger(state = {account: {}}, action) {
+   switch (action.type) {
+      case 'CHANGE_PAGE':
+         return {page: action.newPage}
+      default:
+         return state
+   }
+}
+
 export default combineReducers({
-  accountChanger
+  accountChanger,
+  pageChanger
 })
