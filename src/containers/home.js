@@ -51,37 +51,26 @@ class Home extends React.Component {
   //   }
   // }
 
-  // componentDidMount() {
-  //   let jwt = localStorage.getItem('jwt')
-  //
-  //   if (jwt) {
-  //     fetch(`http://localhost:3000/api/login`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json',
-  //         Authorization: `Bearer ${jwt}`
-  //       },
-  //       body: JSON.stringify(
-  //         {
-  //           account: {
-  //           // name: 'Admin Account',
-  //           // password: 'aaa'
-  //           name: 'Account 2',
-  //           password: 'bbb'
-  //           }
-  //         }
-  //       )
-  //     })
-  //     .then(res => res.json())
-  //     .then(json => {
-  //       console.log(json)
-  //       this.setState({
-  //         account: json.account
-  //       }, () => {this.props.changeAccount(json.account)})
-  //     })
-  //   }
-  // }
+  componentDidMount() {
+    let jwt = localStorage.getItem('jwt')
+
+    if (jwt) {
+      fetch(`http://localhost:3000/api/profile`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          Authorization: `Bearer ${jwt}`
+        }
+      })
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          account: json.account
+        }, () => {this.props.changeAccount(json.account)})
+      })
+    }
+  }
 
   changeAccount = (input) => {
     this.setState({
@@ -95,26 +84,23 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props.account)
     if (Object.keys(this.props.account).length != 0 && this.props.account.rank == 'admin') {
-      console.log("ADMIN!")
       return(
         <div>
           <button onClick={() => {this.logOut()}}>Log Out</button>
-          <AdminPage account={this.state.account}/>
+          <AdminPage account={this.props.account}/>
         </div>
       )
     } else if (Object.keys(this.props.account).length != 0) {
-      console.log("Norm!")
       return(
         <div>
-          <RestaurantPage account={this.state.account}/>
+          <button onClick={() => {this.logOut()}}>Log Out</button>
+          <RestaurantPage account={this.props.account}/>
         </div>
       )
     } else {
       return(
         <div>
-          <button onClick={() => {this.swapDisplay()}}>SWAP DISPLAY</button>
           <LoginPage changeAccount={this.changeAccount}/>
         </div>
       )
