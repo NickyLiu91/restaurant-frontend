@@ -54,17 +54,17 @@ class RestaurantPage extends React.Component {
 
   componentDidMount(){
     let restaurantId = this.props.match.url.slice(12)
-    console.log(restaurantId)
 
     fetch(`http://localhost:3000/api/restaurants//menu/${restaurantId}`)
     .then(res => res.json())
     .then(json => {
       this.props.changeRestaurant(json)
+      this.props.changeMenu(json.menuitems)
     })
   }
 
   generateMenu = () => {
-    let list = this.state.menu
+    let list = this.props.menu
     // console.log(list)
 
     return list.map(
@@ -73,7 +73,7 @@ class RestaurantPage extends React.Component {
           <div>
             <p>Name: {item.name}</p>
             <p>Price: {parseFloat(item.price)}</p>
-            {this.state.guest ? <button onClick={() => {this.addToOrder(item)}}>Add To Order</button> : null}
+            {!this.props.account ? <button onClick={() => {this.addToOrder(item)}}>Add To Order</button> : null}
           </div>
         )
       }
@@ -125,12 +125,6 @@ class RestaurantPage extends React.Component {
     )
   }
 
-  swapType = () => {
-      this.setState({
-        guest: !this.state.guest
-      })
-  }
-
   submitOrder = () => {
 
     let currentOrderCopy = this.state.currentOrder
@@ -143,8 +137,8 @@ class RestaurantPage extends React.Component {
        method: 'POST',
        headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+          'Accept': 'application/json'
+          // Authorization: `Bearer ${localStorage.getItem('jwt')}`
        },
        body: JSON.stringify(
        {
@@ -163,10 +157,9 @@ class RestaurantPage extends React.Component {
 
   render() {
     // console.log(this.state)
-    if (Object.keys(this.state.restaurant).length != 0 && !this.state.guest) {
+    if (Object.keys(this.props.restaurant).length != 0 && Object.keys(this.props.account).length != 0) {
       return(
         <div>
-          <button onClick={() => {this.swapType()}}>SWAPPY</button>
           <div>
             <h1>MENU</h1>
             {this.generateMenu()}
@@ -179,11 +172,9 @@ class RestaurantPage extends React.Component {
           </div>
         </div>
       )
-    } else if (this.state.guest) {
+    } else if (Object.keys(this.props.restaurant).length != 0) {
       return(
         <div>
-          <button onClick={() => {this.swapType()}}>SWAPPY</button>
-          <button onClick={() => {console.log(this.state)}}>STATE</button>
           <div>
             <h1>MENU</h1>
             {this.generateMenu()}
@@ -191,7 +182,6 @@ class RestaurantPage extends React.Component {
           </div>
         </div>
       )
-
     } else {
       return(
         <div>

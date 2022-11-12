@@ -18,7 +18,7 @@ function restaurantChanger(state = {restaurant: {}}, action) {
    }
 }
 
-function menuChanger(state = {menu: {}}, action) {
+function menuChanger(state = {menu: []}, action) {
    switch (action.type) {
       case 'CHANGE_MENU':
          return {menu: action.newMenu}
