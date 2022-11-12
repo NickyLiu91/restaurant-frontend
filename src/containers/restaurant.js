@@ -128,10 +128,31 @@ class RestaurantPage extends React.Component {
       order => {
         return (
           <div>
-            <p>Order ID: {order.id}</p>
-            <p>location: {order.location}</p>
             {this.generateOrderItems(order)}
             <p>Total Price: {order.totalPrice}</p>
+            <br/>
+            <br/>
+          </div>
+        )
+      }
+    )
+  }
+
+  generateCurrentOrder = () => {
+    let list = this.state.currentOrder
+    let totalPrice = 0
+
+    // let newArray = list.map(item => {return item.name})
+
+    return list.map(
+      orderItem => {
+        return (
+          <div>
+            <div>
+              <p>name: {orderItem.name}</p>
+              <p>Price: {orderItem.price}</p>
+              <br/>
+            </div>
             <br/>
             <br/>
           </div>
@@ -197,6 +218,10 @@ class RestaurantPage extends React.Component {
             <h1>MENU</h1>
             {this.generateMenu()}
             <button onClick={() => {this.submitOrder()}}>Submit Order</button>
+          </div>
+          <div>
+            <h1>Current Order</h1>
+            {this.generateCurrentOrder()}
           </div>
         </div>
       )
