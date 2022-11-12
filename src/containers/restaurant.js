@@ -74,6 +74,7 @@ class RestaurantPage extends React.Component {
             <p>Name: {item.name}</p>
             <p>Price: {parseFloat(item.price)}</p>
             {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.addToOrder(item)}}> + </button> : null}
+            {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.removeOrderItem(item)}}> - </button> : null}
           </div>
         )
       }
@@ -88,6 +89,20 @@ class RestaurantPage extends React.Component {
     this.setState({
       currentOrder: newOrderList
     })
+  }
+
+  removeOrderItem = (item) => {
+
+    let newOrderList = this.state.currentOrder
+    let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.name == item.name)
+    if (matchingItemIndex != -1) {
+      newOrderList.splice(matchingItemIndex, 1)
+      this.setState({
+        currentOrder: newOrderList
+      })
+    } else {
+      alert ("You do not have that item in your order!")
+    }
   }
 
   generateOrderItems = (order) => {
@@ -131,7 +146,6 @@ class RestaurantPage extends React.Component {
     let currentPrice = 0
 
     currentOrderCopy.forEach(item => {currentPrice += parseFloat(item.price)})
-    console.log(this.state.currentOrder)
 
     fetch(`http://localhost:3000/api/orders`, {
        method: 'POST',
@@ -152,7 +166,11 @@ class RestaurantPage extends React.Component {
       )
     })
     .then(res => res.json())
-    .then(json => {console.log(json)})
+    .then(json => {
+      this.setState({
+        currentOrder: []
+      }, () => {console.log(json)})
+    })
   }
 
   render() {
