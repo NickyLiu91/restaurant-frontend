@@ -9,10 +9,19 @@ function accountChanger(state = {account: {}}, action) {
    }
 }
 
-function pageChanger(state = {account: {}}, action) {
+function restaurantChanger(state = {restaurant: {}}, action) {
    switch (action.type) {
-      case 'CHANGE_PAGE':
-         return {page: action.newPage}
+      case 'CHANGE_RESTAURANT':
+         return {restaurant: action.newRestaurant}
+      default:
+         return state
+   }
+}
+
+function menuChanger(state = {menu: {}}, action) {
+   switch (action.type) {
+      case 'CHANGE_MENU':
+         return {menu: action.newMenu}
       default:
          return state
    }
@@ -20,5 +29,6 @@ function pageChanger(state = {account: {}}, action) {
 
 export default combineReducers({
   accountChanger,
-  pageChanger
+  restaurantChanger,
+  menuChanger
 })

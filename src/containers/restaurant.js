@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 
 class RestaurantPage extends React.Component {
@@ -51,17 +52,16 @@ class RestaurantPage extends React.Component {
   //   }
   // }
 
-  // componentDidMount(){
-  //   let restaurantId = this.props.match.url.slice(9)
-  //
-  //   fetch(`http://localhost:3000/api/v1/posts/${postId}`)
-  //   .then(res => res.json())
-  //   .then(json => {
-  //     this.setState({
-  //       pagePost: json
-  //     })
-  //   })
-  // }
+  componentDidMount(){
+    let restaurantId = this.props.match.url.slice(12)
+    console.log(restaurantId)
+
+    fetch(`http://localhost:3000/api/restaurants//menu/${restaurantId}`)
+    .then(res => res.json())
+    .then(json => {
+      this.props.changeRestaurant(json)
+    })
+  }
 
   generateMenu = () => {
     let list = this.state.menu
@@ -205,13 +205,17 @@ class RestaurantPage extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    account: state.accountChanger.account
+    account: state.accountChanger.account,
+    restaurant: state.restaurantChanger.restaurant,
+    menu: state.menuChanger.menu
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
+    changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event}),
+    changeRestaurant: (event) => dispatch({type: "CHANGE_RESTAURANT", newRestaurant: event}),
+    changeMenu: (event) => dispatch({type: "CHANGE_MENU", newMenu: event})
   }
 }
 
