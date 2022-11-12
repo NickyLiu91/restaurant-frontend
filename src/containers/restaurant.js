@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux'
 
 class RestaurantPage extends React.Component {
 
@@ -11,44 +12,56 @@ class RestaurantPage extends React.Component {
     currentOrder: []
   }
 
-  componentDidMount() {
-    let jwt = localStorage.getItem('jwt')
+  // componentDidMount() {
+  //   let jwt = localStorage.getItem('jwt')
+  //
+  //       if (jwt) {
+  //         fetch(`http://localhost:3000/api/restaurants/${this.props.account.restaurants[0].id}`, {
+  //           method: 'GET',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Accept': 'application/json',
+  //             Authorization: `Bearer ${jwt}`
+  //           }
+  //       })
+  //       .then(res => res.json())
+  //       .then(json => {
+  //         this.generateMenu()
+  //
+  //         this.setState({restaurant: json, menu: json.menuitems}, () => {
+  //           fetch(`http://localhost:3000/api/orders/`, {
+  //             method: 'GET',
+  //             headers: {
+  //               'Content-Type': 'application/json',
+  //               'Accept': 'application/json',
+  //               Authorization: `Bearer ${jwt}`
+  //             }
+  //         })
+  //         .then(res => res.json())
+  //         .then(json => {
+  //           // console.log(json)
+  //           let filteredOrders = json.filter(order => order.restaurant.id == this.state.restaurant.id)
+  //           // console.log(filteredOrders)
+  //           this.setState({
+  //             orders: filteredOrders
+  //           })
+  //         })
+  //         })
+  //       })
+  //   }
+  // }
 
-        if (jwt) {
-          fetch(`http://localhost:3000/api/restaurants/${this.props.account.restaurants[0].id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              Authorization: `Bearer ${jwt}`
-            }
-        })
-        .then(res => res.json())
-        .then(json => {
-          this.generateMenu()
-
-          this.setState({restaurant: json, menu: json.menuitems}, () => {
-            fetch(`http://localhost:3000/api/orders/`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                Authorization: `Bearer ${jwt}`
-              }
-          })
-          .then(res => res.json())
-          .then(json => {
-            // console.log(json)
-            let filteredOrders = json.filter(order => order.restaurant.id == this.state.restaurant.id)
-            // console.log(filteredOrders)
-            this.setState({
-              orders: filteredOrders
-            })
-          })
-          })
-        })
-    }
-  }
+  // componentDidMount(){
+  //   let restaurantId = this.props.match.url.slice(9)
+  //
+  //   fetch(`http://localhost:3000/api/v1/posts/${postId}`)
+  //   .then(res => res.json())
+  //   .then(json => {
+  //     this.setState({
+  //       pagePost: json
+  //     })
+  //   })
+  // }
 
   generateMenu = () => {
     let list = this.state.menu
@@ -190,4 +203,19 @@ class RestaurantPage extends React.Component {
 
 }
 
-export default RestaurantPage
+const mapStateToProps = state => {
+  return {
+    account: state.accountChanger.account
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RestaurantPage)

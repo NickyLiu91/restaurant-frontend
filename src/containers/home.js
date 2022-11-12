@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminPage from './adminPage';
 import LoginPage from './loginPage';
-import RestaurantPage from './restaurantPage';
+import Restaurant from './restaurant';
 import {connect} from 'react-redux'
 
 class Home extends React.Component {
@@ -91,17 +91,10 @@ class Home extends React.Component {
           <AdminPage account={this.props.account}/>
         </div>
       )
-    } else if (Object.keys(this.props.account).length != 0) {
-      return(
-        <div>
-          <button onClick={() => {this.logOut()}}>Log Out</button>
-          <RestaurantPage account={this.props.account}/>
-        </div>
-      )
     } else {
       return(
         <div>
-          <LoginPage changeAccount={this.changeAccount}/>
+          <Restaurant />
         </div>
       )
     }
