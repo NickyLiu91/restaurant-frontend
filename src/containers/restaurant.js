@@ -73,7 +73,7 @@ class RestaurantPage extends React.Component {
           <div>
             <p>Name: {item.name}</p>
             <p>Price: {parseFloat(item.price)}</p>
-            {!this.props.account ? <button onClick={() => {this.addToOrder(item)}}>Add To Order</button> : null}
+            {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.addToOrder(item)}}> + </button> : null}
           </div>
         )
       }
@@ -144,7 +144,7 @@ class RestaurantPage extends React.Component {
        {
          order: {
             orderItems: currentOrderCopy,
-            restaurant_id: this.state.restaurant.id,
+            restaurant_id: this.props.restaurant.id,
             location: "online",
             totalPrice: currentPrice
          }
