@@ -94,7 +94,7 @@ class Home extends React.Component {
     } else {
       return(
         <div>
-          <Restaurant />
+          <LoginPage />
         </div>
       )
     }

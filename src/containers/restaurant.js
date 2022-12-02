@@ -223,7 +223,6 @@ class RestaurantPage extends React.Component {
       return(
         <div>
           <div>
-          <p>{this.props.location}</p>
             <h1>MENU</h1>
             {this.generateMenu()}
             <button onClick={() => {this.submitOrder()}}>Submit Order</button>
