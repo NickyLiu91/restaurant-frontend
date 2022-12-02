@@ -56,12 +56,11 @@ class RestaurantPage extends React.Component {
     let restaurantId
     if (this.props.match.url.slice(-6) == "online"){
       let adjustedAddress = this.props.match.url.slice(0, -7)
-      // console.log(adjustedAddress)
-      // console.log(adjustedAddress.slice(12))
-      // restaurantId = adjustedAddress.slice(12)
       restaurantId = adjustedAddress.slice(12)
+      this.props.changeLocation("online")
     } else {
       restaurantId = this.props.match.url.slice(12)
+      this.props.changeLocation("offline")
     }
 
     fetch(`http://localhost:3000/api/restaurants/menu/${restaurantId}`)
@@ -224,6 +223,7 @@ class RestaurantPage extends React.Component {
       return(
         <div>
           <div>
+          <p>{this.props.location}</p>
             <h1>MENU</h1>
             {this.generateMenu()}
             <button onClick={() => {this.submitOrder()}}>Submit Order</button>
@@ -249,7 +249,8 @@ const mapStateToProps = state => {
   return {
     account: state.accountChanger.account,
     restaurant: state.restaurantChanger.restaurant,
-    menu: state.menuChanger.menu
+    menu: state.menuChanger.menu,
+    location: state.locationChanger.location
   }
 }
 
@@ -257,7 +258,8 @@ const mapDispatchToProps = dispatch => {
   return {
     changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event}),
     changeRestaurant: (event) => dispatch({type: "CHANGE_RESTAURANT", newRestaurant: event}),
-    changeMenu: (event) => dispatch({type: "CHANGE_MENU", newMenu: event})
+    changeMenu: (event) => dispatch({type: "CHANGE_MENU", newMenu: event}),
+    changeLocation: (event) => dispatch({type: "CHANGE_LOCATION", newLocation: event})
   }
 }
 
