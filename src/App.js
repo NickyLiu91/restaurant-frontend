@@ -7,6 +7,7 @@ import Home from './containers/home.js';
 import Restaurant from './containers/restaurant.js';
 import Navbar from './containers/navbar.js';
 import LoginPage from './containers/loginPage.js';
+import AdminPage from './containers/adminPage';
 
 class App extends React.Component {
   render() {
@@ -17,6 +18,7 @@ class App extends React.Component {
           <Route exact path="/" component={Home} />
           <Route path="/restaurant/:id/:online?" component={Restaurant} />
           <Route path="/login" component={LoginPage} />
+          <Route path="/admin" component={AdminPage} />
         </Switch>
       </div>
     )
