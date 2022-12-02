@@ -53,9 +53,18 @@ class RestaurantPage extends React.Component {
   // }
 
   componentDidMount(){
-    let restaurantId = this.props.match.url.slice(12)
+    let restaurantId
+    if (this.props.match.url.slice(-6) == "online"){
+      let adjustedAddress = this.props.match.url.slice(0, -7)
+      // console.log(adjustedAddress)
+      // console.log(adjustedAddress.slice(12))
+      // restaurantId = adjustedAddress.slice(12)
+      restaurantId = adjustedAddress.slice(12)
+    } else {
+      restaurantId = this.props.match.url.slice(12)
+    }
 
-    fetch(`http://localhost:3000/api/restaurants//menu/${restaurantId}`)
+    fetch(`http://localhost:3000/api/restaurants/menu/${restaurantId}`)
     .then(res => res.json())
     .then(json => {
       this.props.changeRestaurant(json)
