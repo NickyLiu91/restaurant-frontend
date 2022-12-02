@@ -15,11 +15,14 @@ class NavBar extends React.Component {
     if (!localStorage.getItem('jwt')) {
       return(
         <nav>
-          <div >
+          <div>
             <p onClick={() => {this.props.history.push("/")}}>Home</p>
           </div>
-          <div >
+          <div>
             <p onClick={() => {this.props.history.push("/login")}}>LogIn</p>
+          </div>
+          <div>
+            <p onClick={() => {this.logOut()}}>LogOut</p>
           </div>
         </nav>
       )
