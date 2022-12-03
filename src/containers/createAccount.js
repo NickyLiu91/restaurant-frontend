@@ -44,7 +44,8 @@ class CreateAccount extends React.Component {
           email: this.state.email,
           password: this.state.employeePassword,
           phone: this.state.phone,
-          rank: this.state.rank
+          rank: this.state.rank,
+          restaurant_id: this.state.restaurant_id
        }
      }
     )
@@ -84,10 +85,13 @@ class CreateAccount extends React.Component {
         return(
           <div>
               <button onClick={() => {console.log(this.props)}}>test</button>
-            {this.props.account.rank == 'admin' ?
+            {this.props.account.rank == 'Admin' ?
             <div>
               <h1>Create an employee account!</h1>
               Account name: <input id="employeeName" type="text" value={this.state.employeeName} onChange={event => this.handleStuff(event)}/>
+              <br/>
+              <br/>
+              Restaurant: <input id="restaurant_id" type="integer" value={this.state.restaurant_id} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
               E-mail: <input id="email" type="text" value={this.state.email} onChange={event => this.handleStuff(event)}/>
@@ -112,7 +116,7 @@ class CreateAccount extends React.Component {
             </div> : null }
             <br/>
             <br/>
-            {this.props.account.rank == 'admin' ?
+            {this.props.account.rank == 'Admin' ?
             <div>
               <h1>Create a restaurant!!</h1>
               Restaurant name: <input id="restaurantName" type="text" value={this.state.restaurantName} onChange={event => this.handleStuff(event)}/>
