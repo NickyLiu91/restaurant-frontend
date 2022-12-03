@@ -8,6 +8,7 @@ import Restaurant from './containers/restaurant.js';
 import Navbar from './containers/navbar.js';
 import LoginPage from './containers/loginPage.js';
 import AdminPage from './containers/adminPage';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 class App extends React.Component {
   render() {

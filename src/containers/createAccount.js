@@ -1,31 +1,36 @@
 import React from 'react';
+import {connect} from 'react-redux'
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 class CreateAccount extends React.Component {
 
   state = {
     account: this.props.account,
-    managerName: '',
+    employeeName: '',
     tableName: '',
     restaurantName: '',
     email: '',
-    managerPassword: '',
+    employeePassword: '',
     tablePassword: '',
     phone: '',
     rank: '',
     restaurant_id: '',
     account_id: '',
-    rank: 'manager',
+    rank: '',
     location: '',
-    createType: 'account'
+    createType: 'account',
+    dropDown: false
   }
 
+
   handleStuff = (event) => {
-   this.setState({
-     [event.target.id]: event.target.value
-   })
- }
+    this.setState({
+      [event.target.id]: event.target.value
+    })
+  }
 
- createManager = () => {
+ createEmployee = () => {
    fetch(`http://localhost:3000/api/accounts`, {
      method: 'POST',
      headers: {
@@ -35,31 +40,11 @@ class CreateAccount extends React.Component {
      body: JSON.stringify(
      {
        account: {
-          name: this.state.managerName,
+          name: this.state.employeeName,
           email: this.state.email,
-          password: this.state.managerPassword,
+          password: this.state.employeePassword,
           phone: this.state.phone,
-          rank: "manager"
-       }
-     }
-    )
-  })
- }
-
- createTable = () => {
-   fetch(`http://localhost:3000/api/accounts`, {
-     method: 'POST',
-     headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-     },
-     body: JSON.stringify(
-     {
-       account: {
-          name: this.state.tableName,
-          rank: 'table',
-          password: this.state.tablePassword,
-          restaurant_id: this.state.account.rank == 'admin' ? this.state.restaurant_id : this.state.account.restaurants[0].id
+          rank: this.state.rank
        }
      }
     )
@@ -84,60 +69,50 @@ class CreateAccount extends React.Component {
   })
  }
 
- // swapCreateType = () => {
- //   if (this.state.createType == 'account') {
- //     this.setState({createType: 'table'})
- //   } else {
- //     this.setState({createType: 'account'})
- //   }
- // }
-
+ employeeRankSelector = (event) => {
+   this.setState({
+     rank: event.target.id.slice(0, -6)
+   })
+ }
 
   render() {
-    if (Object.keys(this.state.account).length != 0) {
+    const ranks = ["Owner", "Employee"]
+
+    if (Object.keys(this.props.account).length != 0) {
     // if (this.state.rank == 'admin') {
       // if (this.state.createType == 'account') {
         return(
           <div>
-              <button onClick={() => {console.log(this.state.account.restaurants[0])}}>test</button>
-            {this.state.account.rank == 'admin' ?
+              <button onClick={() => {console.log(this.props)}}>test</button>
+            {this.props.account.rank == 'admin' ?
             <div>
-              <h1>Create a manager account!</h1>
-              Account name: <input id="managerName" type="text" value={this.state.managerName} onChange={event => this.handleStuff(event)}/>
+              <h1>Create an employee account!</h1>
+              Account name: <input id="employeeName" type="text" value={this.state.employeeName} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
               E-mail: <input id="email" type="text" value={this.state.email} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
-              Password: <input id="managerPassword" type="password" value={this.state.managerPassword} onChange={event => this.handleStuff(event)}/>
+              Password: <input id="employeePassword" type="password" value={this.state.employeePassword} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
               Phone: <input id="phone" type="text" value={this.state.phone} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
-              <button onClick={this.createManager}>Create Account</button>
+              <div id="rankButton">
+                <p>Rank</p>
+                <DropdownButton id="dropdown-basic-button" title={this.state.rank}>
+                  <Dropdown.Item href="#/action-1" id="OwnerButton" onClick={(event) => {this.employeeRankSelector(event)}}>Owner</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2" id="EmployeeButton" onClick={(event) => {this.employeeRankSelector(event)}}>Employee</Dropdown.Item>
+                </DropdownButton>
+              </div>
+              <br/>
+              <br/>
+              <button onClick={this.createEmployee}>Create Account</button>
             </div> : null }
             <br/>
             <br/>
-            <div>
-              <h1>Create a table account!</h1>
-              Table name: <input id="tableName" type="text" value={this.state.tableName} onChange={event => this.handleStuff(event)}/>
-              <br/>
-              <br/>
-              Password: <input id="tablePassword" type="password" value={this.state.tablePassword} onChange={event => this.handleStuff(event)}/>
-              <br/>
-              <br/>
-              {this.state.account.rank == 'admin' ?
-              <p>
-              Restaurant_id: <input id="restaurant_id" type="text" value={this.state.restaurant_id} onChange={event => this.handleStuff(event)}/>
-              <br/>
-              <br/>
-              </p> : null }
-              <button onClick={this.createTable}>Create Table</button>
-            </div>
-            <br/>
-            <br/>
-            {this.state.account.rank == 'admin' ?
+            {this.props.account.rank == 'admin' ?
             <div>
               <h1>Create a restaurant!!</h1>
               Restaurant name: <input id="restaurantName" type="text" value={this.state.restaurantName} onChange={event => this.handleStuff(event)}/>
@@ -165,4 +140,27 @@ class CreateAccount extends React.Component {
   }
 }
 
-export default CreateAccount
+const mapStateToProps = state => {
+  return {
+    account: state.accountChanger.account,
+    restaurant: state.restaurantChanger.restaurant,
+    menu: state.menuChanger.menu,
+    location: state.locationChanger.location,
+    orders: state.ordersChanger.orders
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event}),
+    changeRestaurant: (event) => dispatch({type: "CHANGE_RESTAURANT", newRestaurant: event}),
+    changeMenu: (event) => dispatch({type: "CHANGE_MENU", newMenu: event}),
+    changeLocation: (event) => dispatch({type: "CHANGE_LOCATION", newLocation: event}),
+    changeOrders: (event) => dispatch({type: "CHANGE_ORDERS", newOrders: event})
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateAccount)

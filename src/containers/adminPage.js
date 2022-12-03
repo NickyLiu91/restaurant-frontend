@@ -10,10 +10,9 @@ class AdminPage extends React.Component {
   }
 
   render() {
-    // console.log(this.state)
+
     return(
-      <p>?????</p>
-      // <CreateAccount account={this.props.account}/>
+      <CreateAccount />
     )
   }
 }
