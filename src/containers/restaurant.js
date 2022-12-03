@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
+import OrderItem from './orderItem';
 
 class RestaurantPage extends React.Component {
 
@@ -79,11 +80,7 @@ class RestaurantPage extends React.Component {
     return list.map(
       orderItem => {
         return (
-          <div>
-            <p>name: {orderItem.name}</p>
-            <p>Price: {orderItem.price}</p>
-            <br/>
-          </div>
+          <OrderItem orderItem={orderItem} />
         )
       }
     )
@@ -95,11 +92,9 @@ class RestaurantPage extends React.Component {
     return list.map(
       order => {
         return (
-          <div>
+          <div className="order">
             {this.generateOrderItems(order)}
             <p>Total Price: {order.totalPrice}</p>
-            <br/>
-            <br/>
           </div>
         )
       }
@@ -117,7 +112,7 @@ class RestaurantPage extends React.Component {
         return (
           <div>
             <div>
-              <p>name: {orderItem.name}</p>
+              <p id="text">name: {orderItem.name}</p>
               <p>Price: {orderItem.price}</p>
               <br/>
             </div>
