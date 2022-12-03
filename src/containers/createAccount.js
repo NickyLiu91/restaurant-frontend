@@ -128,7 +128,7 @@ class CreateAccount extends React.Component {
               Owner_id: <input id="account_id" type="text" value={this.state.account_id} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
-              <button onClick={this.createRestaurant}>Create Table</button>
+              <button onClick={this.createRestaurant}>Create Restaurant</button>
             </div>
             : null }
           </div>
