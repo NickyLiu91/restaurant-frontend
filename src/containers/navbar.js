@@ -30,9 +30,12 @@ class NavBar extends React.Component {
   logOut = () => {
     localStorage.removeItem('jwt');
     this.props.changeAccount({})
+    this.props.history.push(`/restaurant/${this.props.restaurant.id}`)
   }
 
   render(){
+    console.log(this.props.account)
+    console.log(this.props.restaurant)
     // if (Object.keys(this.props.account).length != 0 && this.props.account.rank == 'admin') {
     //
     // }
@@ -40,7 +43,7 @@ class NavBar extends React.Component {
       return(
         <nav>
           <div>
-            <p onClick={() => {this.props.history.push("/")}}>Home</p>
+            {localStorage.getItem('jwt') ? <p>{this.props.account.name}</p> : null }
           </div>
           <div>
             {localStorage.getItem('jwt') && this.props.account.rank == 'admin' ? <p onClick={() => {this.props.history.push("/admin")}}>Admin</p> : null }
@@ -57,7 +60,8 @@ class NavBar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    account: state.accountChanger.account
+    account: state.accountChanger.account,
+    restaurant: state.restaurantChanger.restaurant
   }
 }
 

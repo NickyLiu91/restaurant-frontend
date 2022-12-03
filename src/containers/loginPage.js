@@ -1,5 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
+import {compose} from 'redux';
+import { Route, Link, withRouter } from 'react-router-dom'
 
 class LoginPage extends React.Component {
 
@@ -32,9 +34,9 @@ class LoginPage extends React.Component {
   })
   .then(res => res.json())
   .then(json => {
-    console.log(json)
     localStorage.setItem('jwt', json.jwt)
     this.props.changeAccount(json.account)
+    this.props.history.push(`/restaurant/${this.props.restaurant.id}`)
     })
   }
 
@@ -54,13 +56,21 @@ class LoginPage extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    restaurant: state.restaurantChanger.restaurant
+  }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event})
   }
 }
 
-export default connect (
-  null,
-  mapDispatchToProps
+export default compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps)
 )(LoginPage)
