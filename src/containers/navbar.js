@@ -34,11 +34,6 @@ class NavBar extends React.Component {
   }
 
   render(){
-    console.log(this.props.account)
-    console.log(this.props.restaurant)
-    // if (this.props.restaurant.account.id == this.props.account.id) {
-    //   console.log("this is the owner!")
-    // }
       return(
         <nav>
           <div>

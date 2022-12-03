@@ -13,45 +13,6 @@ class RestaurantPage extends React.Component {
     currentOrder: []
   }
 
-  // componentDidMount() {
-  //   let jwt = localStorage.getItem('jwt')
-  //
-  //       if (jwt) {
-  //         fetch(`http://localhost:3000/api/restaurants/${this.props.account.restaurants[0].id}`, {
-  //           method: 'GET',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             'Accept': 'application/json',
-  //             Authorization: `Bearer ${jwt}`
-  //           }
-  //       })
-  //       .then(res => res.json())
-  //       .then(json => {
-  //         this.generateMenu()
-  //
-  //         this.setState({restaurant: json, menu: json.menuitems}, () => {
-  //           fetch(`http://localhost:3000/api/orders/`, {
-  //             method: 'GET',
-  //             headers: {
-  //               'Content-Type': 'application/json',
-  //               'Accept': 'application/json',
-  //               Authorization: `Bearer ${jwt}`
-  //             }
-  //         })
-  //         .then(res => res.json())
-  //         .then(json => {
-  //           // console.log(json)
-  //           let filteredOrders = json.filter(order => order.restaurant.id == this.state.restaurant.id)
-  //           // console.log(filteredOrders)
-  //           this.setState({
-  //             orders: filteredOrders
-  //           })
-  //         })
-  //         })
-  //       })
-  //   }
-  // }
-
   componentDidMount(){
     let restaurantId
     if (this.props.match.url.slice(-6) == "online"){
@@ -68,12 +29,13 @@ class RestaurantPage extends React.Component {
     .then(json => {
       this.props.changeRestaurant(json)
       this.props.changeMenu(json.menuitems)
+      this.props.changeOrders(json.orders)
+      console.log(this.props)
     })
   }
 
   generateMenu = () => {
     let list = this.props.menu
-    // console.log(list)
 
     return list.map(
       item => {
@@ -90,9 +52,7 @@ class RestaurantPage extends React.Component {
   }
 
   addToOrder = (item) => {
-    // let ordersCopy = this.state.orders
     let newOrderList = this.state.currentOrder
-    // console.log(this.state.restaurant)
     newOrderList = [...newOrderList, {name: item.name, price: parseFloat(item.price)}]
     this.setState({
       currentOrder: newOrderList
@@ -130,7 +90,7 @@ class RestaurantPage extends React.Component {
   }
 
   generateOrders = () => {
-    let list = this.state.orders
+    let list = this.props.orders
 
     return list.map(
       order => {
@@ -249,7 +209,8 @@ const mapStateToProps = state => {
     account: state.accountChanger.account,
     restaurant: state.restaurantChanger.restaurant,
     menu: state.menuChanger.menu,
-    location: state.locationChanger.location
+    location: state.locationChanger.location,
+    orders: state.ordersChanger.orders
   }
 }
 
@@ -258,7 +219,8 @@ const mapDispatchToProps = dispatch => {
     changeAccount: (event) => dispatch({type: "CHANGE_ACCOUNT", newAccount: event}),
     changeRestaurant: (event) => dispatch({type: "CHANGE_RESTAURANT", newRestaurant: event}),
     changeMenu: (event) => dispatch({type: "CHANGE_MENU", newMenu: event}),
-    changeLocation: (event) => dispatch({type: "CHANGE_LOCATION", newLocation: event})
+    changeLocation: (event) => dispatch({type: "CHANGE_LOCATION", newLocation: event}),
+    changeOrders: (event) => dispatch({type: "CHANGE_ORDERS", newOrders: event})
   }
 }
 

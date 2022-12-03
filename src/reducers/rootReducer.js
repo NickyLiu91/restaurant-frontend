@@ -36,9 +36,19 @@ function locationChanger(state = {location: ""}, action) {
    }
 }
 
+function ordersChanger(state = {orders: []}, action) {
+   switch (action.type) {
+      case 'CHANGE_ORDERS':
+         return {orders: action.newOrders}
+      default:
+         return state
+   }
+}
+
 export default combineReducers({
   accountChanger,
   restaurantChanger,
   menuChanger,
   locationChanger,
+  ordersChanger
 })
