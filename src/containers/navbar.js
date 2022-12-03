@@ -36,17 +36,19 @@ class NavBar extends React.Component {
   render(){
     console.log(this.props.account)
     console.log(this.props.restaurant)
-    // if (Object.keys(this.props.account).length != 0 && this.props.account.rank == 'admin') {
-    //
+    // if (this.props.restaurant.account.id == this.props.account.id) {
+    //   console.log("this is the owner!")
     // }
-    // if (!localStorage.getItem('jwt')) {
       return(
         <nav>
           <div>
             {localStorage.getItem('jwt') ? <p>{this.props.account.name}</p> : null }
           </div>
           <div>
-            {localStorage.getItem('jwt') && this.props.account.rank == 'admin' ? <p onClick={() => {this.props.history.push("/admin")}}>Admin</p> : null }
+            {localStorage.getItem('jwt') && (this.props.account.rank == 'admin'
+          || (Object.keys(this.props.account).length != 0 && Object.keys(this.props.restaurant).length != 0)
+           && (this.props.account.id == this.props.restaurant.account.id))
+           ? <p onClick={() => {this.props.history.push("/admin")}}>Admin</p> : null }
           </div>
           <div>
             {!localStorage.getItem('jwt') ? <p onClick={() => {this.props.history.push("/login")}}>LogIn</p> : <p onClick={() => {this.logOut()}}>LogOut</p>}
