@@ -31,25 +31,60 @@ class CreateAccount extends React.Component {
   }
 
  createEmployee = () => {
-   fetch(`http://localhost:3000/api/accounts`, {
-     method: 'POST',
-     headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-     },
-     body: JSON.stringify(
-     {
-       account: {
-          name: this.state.employeeName,
-          email: this.state.email,
-          password: this.state.employeePassword,
-          phone: this.state.phone,
-          rank: this.state.rank,
-          restaurant_id: this.state.restaurant_id
+   if (this.props.account.rank == "Admin") {
+     fetch(`http://localhost:3000/api/accounts`, {
+       method: 'POST',
+       headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+       },
+       body: JSON.stringify(
+       {
+         account: {
+            name: this.state.employeeName,
+            email: this.state.email,
+            password: this.state.employeePassword,
+            phone: this.state.phone,
+            rank: this.state.rank,
+            restaurant_id: this.state.restaurant_id
+         }
        }
+      )
+    })
+  } else {
+    fetch(`http://localhost:3000/api/accounts`, {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+         'Accept': 'application/json'
+      },
+      body: JSON.stringify(
+      {
+        account: {
+           name: this.state.employeeName,
+           email: this.state.email,
+           password: this.state.employeePassword,
+           phone: this.state.phone,
+           rank: "Employee",
+           restaurant_id: this.state.restaurant_id
+        }
+      }
+     )
+   })
+  }
+ }
+
+ generateOwnerRestaurants = () => {
+   let list = this.props.account.restaurants
+   console.log(list)
+
+   return list.map(
+     restaurant => {
+       return (
+         <Dropdown.Item id={restaurant.id} onClick={(event) => {this.setState({rank: event.id})}}>{restaurant.id}</Dropdown.Item>
+       )
      }
-    )
-  })
+   )
  }
 
  createRestaurant = () => {
@@ -80,20 +115,29 @@ class CreateAccount extends React.Component {
     const ranks = ["Owner", "Employee"]
 
     if (Object.keys(this.props.account).length != 0) {
-    // if (this.state.rank == 'admin') {
-      // if (this.state.createType == 'account') {
         return(
           <div>
               <button onClick={() => {console.log(this.props)}}>test</button>
-            {this.props.account.rank == 'Admin' ?
             <div>
-              <h1>Create an employee account!</h1>
+              <h1>Create an account!</h1>
               Account name: <input id="employeeName" type="text" value={this.state.employeeName} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
-              Restaurant: <input id="restaurant_id" type="integer" value={this.state.restaurant_id} onChange={event => this.handleStuff(event)}/>
-              <br/>
-              <br/>
+              {this.props.account.rank == 'Admin' ?
+                <div>
+                Restaurant: <input id="restaurant_id" type="integer" value={this.state.restaurant_id} onChange={event => this.handleStuff(event)}/>
+                <br/>
+                <br/>
+                </div> :
+                <div id="restaurants">
+                  <p>Restaurant ID</p>
+                  <DropdownButton id="dropdown-basic-button" title={this.state.rank}>
+                    {this.generateOwnerRestaurants()}
+                  </DropdownButton>
+                  <br/>
+                  <br/>
+                </div>
+              }
               E-mail: <input id="email" type="text" value={this.state.email} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
@@ -103,17 +147,18 @@ class CreateAccount extends React.Component {
               Phone: <input id="phone" type="text" value={this.state.phone} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
+              {this.props.account.rank == 'Admin' ?
               <div id="rankButton">
                 <p>Rank</p>
                 <DropdownButton id="dropdown-basic-button" title={this.state.rank}>
                   <Dropdown.Item href="#/action-1" id="OwnerButton" onClick={(event) => {this.employeeRankSelector(event)}}>Owner</Dropdown.Item>
                   <Dropdown.Item href="#/action-2" id="EmployeeButton" onClick={(event) => {this.employeeRankSelector(event)}}>Employee</Dropdown.Item>
                 </DropdownButton>
-              </div>
-              <br/>
-              <br/>
+                <br/>
+                <br/>
+              </div> : null}
               <button onClick={this.createEmployee}>Create Account</button>
-            </div> : null }
+            </div>
             <br/>
             <br/>
             {this.props.account.rank == 'Admin' ?
@@ -133,6 +178,12 @@ class CreateAccount extends React.Component {
             : null }
           </div>
         )
+    } else if (this.props.account.rank == "Owner") {
+      return (
+        <div>
+          222
+        </div>
+      )
     } else {
       return(
         <div>
