@@ -60,17 +60,15 @@ class RestaurantPage extends React.Component {
   }
 
   removeOrderItem = (item) => {
+    console.log(item.id)
 
     let newOrderList = this.state.currentOrder
-    let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.name == item.name)
-    if (matchingItemIndex != -1) {
-      newOrderList.splice(matchingItemIndex, 1)
-      this.setState({
-        currentOrder: newOrderList
-      })
-    } else {
-      alert ("You do not have that item in your order!")
-    }
+    let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.id == item.id)
+
+    newOrderList.splice(matchingItemIndex, 1)
+    this.setState({
+      currentOrder: newOrderList
+    })
   }
 
   generateOrderItems = (order) => {
@@ -113,15 +111,7 @@ class RestaurantPage extends React.Component {
       orderItem => {
         return (
           <div>
-            <div>
-              <p id="text">name: {orderItem.name}</p>
-              <p>Price: {orderItem.price}</p>
-              <p>id: {orderItem.id}</p>
-              <p>Status: {orderItem.status}</p>
-              <br/>
-            </div>
-            <br/>
-            <br/>
+            <OrderItem key={orderItem.id} orderItem={orderItem} removeOrderItem={this.removeOrderItem}/>
           </div>
         )
       }
