@@ -60,15 +60,17 @@ class RestaurantPage extends React.Component {
   }
 
   removeOrderItem = (item) => {
-    console.log(item.id)
+    if (item.status == "Not Started") {
+      let newOrderList = this.state.currentOrder
+      let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.id == item.id)
 
-    let newOrderList = this.state.currentOrder
-    let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.id == item.id)
-
-    newOrderList.splice(matchingItemIndex, 1)
-    this.setState({
-      currentOrder: newOrderList
-    })
+      newOrderList.splice(matchingItemIndex, 1)
+      this.setState({
+        currentOrder: newOrderList
+      })
+    } else {
+      alert("That item is currently being prepared and cannot be cancelled.")
+    }
   }
 
   generateOrderItems = (order) => {
@@ -145,9 +147,10 @@ class RestaurantPage extends React.Component {
     })
     .then(res => res.json())
     .then(json => {
+      console.log(json)
       this.setState({
-        currentOrder: []
-      }, () => {console.log(json)})
+        currentOrder: json.orderItems
+      })
     })
   }
 
