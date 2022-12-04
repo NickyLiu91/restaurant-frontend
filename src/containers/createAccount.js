@@ -81,7 +81,7 @@ class CreateAccount extends React.Component {
    return list.map(
      restaurant => {
        return (
-         <Dropdown.Item id={restaurant.id} onClick={(event) => {this.setState({rank: event.id})}}>{restaurant.id}</Dropdown.Item>
+         <Dropdown.Item value={restaurant.id} onClick={(event) => {this.setState({restaurant_id: restaurant.id})}}>{restaurant.id}</Dropdown.Item>
        )
      }
    )

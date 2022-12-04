@@ -37,7 +37,7 @@ class NavBar extends React.Component {
       return(
         <nav>
           <div>
-            {localStorage.getItem('jwt') ? <p>{this.props.account.name}</p> : null }
+            {localStorage.getItem('jwt') ? <p>{this.props.account.name}</p> : <p>Guest</p>}
           </div>
           <div>
             {localStorage.getItem('jwt') && (this.props.account.rank == 'Admin'

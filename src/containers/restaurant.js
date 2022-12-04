@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import OrderItem from './orderItem';
+import {v4 as uuidv4} from 'uuid'
 
 class RestaurantPage extends React.Component {
 
@@ -31,7 +32,6 @@ class RestaurantPage extends React.Component {
       this.props.changeRestaurant(json)
       this.props.changeMenu(json.menuitems)
       this.props.changeOrders(json.orders)
-      console.log(this.props)
     })
   }
 
@@ -45,7 +45,6 @@ class RestaurantPage extends React.Component {
             <p>Name: {item.name}</p>
             <p>Price: {parseFloat(item.price)}</p>
             {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.addToOrder(item)}}> + </button> : null}
-            {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.removeOrderItem(item)}}> - </button> : null}
           </div>
         )
       }
@@ -54,7 +53,7 @@ class RestaurantPage extends React.Component {
 
   addToOrder = (item) => {
     let newOrderList = this.state.currentOrder
-    newOrderList = [...newOrderList, {name: item.name, price: parseFloat(item.price)}]
+    newOrderList = [...newOrderList, {name: item.name, price: parseFloat(item.price), id: uuidv4(), status: "Not Started"}]
     this.setState({
       currentOrder: newOrderList
     })
@@ -76,11 +75,13 @@ class RestaurantPage extends React.Component {
 
   generateOrderItems = (order) => {
     let list = order.orderItems
+    console.log(list)
 
     return list.map(
       orderItem => {
+        console.log("111")
         return (
-          <OrderItem orderItem={orderItem} />
+          <OrderItem key={orderItem.id} orderItem={orderItem} removeOrderItem={this.removeOrderItem}/>
         )
       }
     )
@@ -95,6 +96,7 @@ class RestaurantPage extends React.Component {
           <div className="order">
             {this.generateOrderItems(order)}
             <p>Total Price: {order.totalPrice}</p>
+            <p>Status: {order.status}</p>
           </div>
         )
       }
@@ -114,6 +116,8 @@ class RestaurantPage extends React.Component {
             <div>
               <p id="text">name: {orderItem.name}</p>
               <p>Price: {orderItem.price}</p>
+              <p>id: {orderItem.id}</p>
+              <p>Status: {orderItem.status}</p>
               <br/>
             </div>
             <br/>
