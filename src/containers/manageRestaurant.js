@@ -50,7 +50,11 @@ class ManageRestaurant extends React.Component {
       )
     })
     .then(res => res.json())
-    .then(json => {console.log(json)})
+    .then(json => {
+      let updatedMenu = [... this.props.menu, json]
+      this.props.changeMenu(updatedMenu)
+    })
+
  }
 
  generateMenu = () => {
