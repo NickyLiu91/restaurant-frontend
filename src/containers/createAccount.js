@@ -193,18 +193,18 @@ submitEmployeeEdit = (employee) => {
    )
  })
   .then(res => res.json())
-  .then(json => {console.log(json)})
-  // .then(json => {
-  //   let newMenu = this.props.menu
-  //   console.log(newMenu)
-  //   let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
-  //   console.log(matchingItemIndex)
-  //   newMenu[matchingItemIndex] = json
-  //   console.log(newMenu)
-  //
-  //   this.props.changeMenu(newMenu)
-  //   this.cancelEdit()
-  // })
+  .then(json => {
+    let newEmployees = this.state.employees
+
+    let matchingEmployeeIndex = this.state.employees.findIndex(employeeObj => employeeObj.id == employee.id)
+    console.log(matchingEmployeeIndex)
+    newEmployees[matchingEmployeeIndex] = json
+
+
+    this.setState({
+      employees: newEmployees
+    }, () => {this.cancelEdit()})
+  })
 }
 
 cancelEdit = () => {
