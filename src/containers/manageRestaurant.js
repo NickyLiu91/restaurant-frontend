@@ -74,15 +74,10 @@ class ManageRestaurant extends React.Component {
    })
    .then(res => {
      let newMenu = this.props.menu
-     console.log(newMenu)
-     let deletedIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
-     console.log(deletedIndex)
-     newMenu.splice(deletedIndex, 1)
-     console.log(newMenu)
+     let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+     newMenu.splice(matchingItemIndex, 1)
 
      this.props.changeMenu(newMenu)
-
-
    })
  }
 
@@ -95,27 +90,37 @@ class ManageRestaurant extends React.Component {
       editItemImage: item.image,
       editItemId: item.id
     })
-    // console.log(item)
-    // fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
-    //   method: 'PUTS',
-    //   headers: {
-    //      'Content-Type': 'application/json',
-    //      'Accept': 'application/json',
-    //      Authorization: `Bearer ${localStorage.getItem('jwt')}`
-    //   }
-    // })
-    // .then(res => {
-    //   let newMenu = this.props.menu
-    //   console.log(newMenu)
-    //   let deletedIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
-    //   console.log(deletedIndex)
-    //   newMenu.splice(deletedIndex, 1)
-    //   console.log(newMenu)
-    //
-    //   this.props.changeMenu(newMenu)
 
+  }
 
-    // })
+  submitItemEdit = (item) => {
+    fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
+      method: 'PUT',
+      headers: {
+         'Content-Type': 'application/json',
+         'Accept': 'application/json',
+         Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      },
+      body: JSON.stringify(
+      {
+        name: this.state.editItemName,
+        price: this.state.editItemPrice,
+        image: this.state.editItemImage
+      }
+     )
+   })
+    .then(res => res.json())
+    .then(json => {
+      let newMenu = this.props.menu
+      console.log(newMenu)
+      let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+      console.log(matchingItemIndex)
+      newMenu[matchingItemIndex] = json
+      console.log(newMenu)
+
+      this.props.changeMenu(newMenu)
+      this.cancelEdit()
+    })
   }
 
  generateMenu = () => {
@@ -144,7 +149,9 @@ class ManageRestaurant extends React.Component {
                Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/>
                <br/>
                <br/>
-               <button onClick={() => {this.editItem(item)}}> Edit </button>
+               {!this.state.edit ? <button onClick={() => {this.editItem(item)}}> Edit </button> :
+               <button onClick={() => {this.submitItemEdit(item)}}> Submit Edit </button>
+               }
                <button onClick={this.cancelEdit}> Cancel </button>
              </div>
            }
