@@ -57,6 +57,18 @@ class ManageRestaurant extends React.Component {
 
  }
 
+ deleteItem = (item) => {
+   console.log(item)
+   fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
+     method: 'DELETE',
+     headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+     }
+   })
+ }
+
  generateMenu = () => {
    let list = this.props.menu
 
@@ -67,6 +79,7 @@ class ManageRestaurant extends React.Component {
            <p>Name: {item.name}</p>
            <img src={require(`../images/restaurant${this.props.restaurant.id}/${item.image}`)} />
            <p>Price: {parseFloat(item.price)}</p>
+           <button onClick={() => {this.deleteItem(item)}}> - </button>
          </div>
        )
      }
