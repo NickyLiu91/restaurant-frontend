@@ -30,9 +30,10 @@ class RestaurantPage extends React.Component {
       })
     }
 
-    fetch(`http://localhost:3000/api/restaurants/menu/${restaurantId}`)
+    fetch(`http://localhost:3000/api/restaurants/${restaurantId}/menu`)
     .then(res => res.json())
     .then(json => {
+      console.log(json)
       this.props.changeRestaurant(json)
       this.props.changeMenu(json.menuitems)
       this.props.changeOrders(json.orders)
