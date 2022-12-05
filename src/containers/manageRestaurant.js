@@ -90,7 +90,6 @@ class ManageRestaurant extends React.Component {
       editItemImage: item.image,
       editItemId: item.id
     })
-
   }
 
   submitItemEdit = (item) => {

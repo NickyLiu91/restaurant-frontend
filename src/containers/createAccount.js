@@ -25,6 +25,7 @@ class CreateAccount extends React.Component {
     employees: [],
     edit: false,
     editEmployeeName: '',
+    editEmployeeRank: '',
     editEmployeeEmail: '',
     editEmployeePassword: '',
     editEmployeePhone: '',
@@ -158,19 +159,104 @@ deleteEmployee = (employee) => {
   })
 }
 
+editEmployee = (employee) => {
+  this.setState({
+    edit: true,
+    editEmployeeName: employee.name,
+    editEmployeeRank: employee.rank,
+    editEmployeeEmail: employee.email,
+    editEmployeePassword: employee.password,
+    editEmployeePhone: employee.phone,
+    editEmployeeId: employee.id
+  })
+}
+
+submitEmployeeEdit = (employee) => {
+  fetch(`http://localhost:3000/api/accounts/${employee.id}`, {
+    method: 'PUT',
+    headers: {
+       'Content-Type': 'application/json',
+       'Accept': 'application/json',
+       Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    },
+    body: JSON.stringify(
+    {
+      account: {
+         name: this.state.editEmployeeName,
+         email: this.state.editEmployeeEmail,
+         password: this.state.editEmployeePassword,
+         phone: this.state.editEmployeePhone,
+         rank: this.state.editEmployeeRank,
+         restaurant_id: this.state.restaurant_id
+      }
+    }
+   )
+ })
+  .then(res => res.json())
+  .then(json => {console.log(json)})
+  // .then(json => {
+  //   let newMenu = this.props.menu
+  //   console.log(newMenu)
+  //   let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+  //   console.log(matchingItemIndex)
+  //   newMenu[matchingItemIndex] = json
+  //   console.log(newMenu)
+  //
+  //   this.props.changeMenu(newMenu)
+  //   this.cancelEdit()
+  // })
+}
+
+cancelEdit = () => {
+  this.setState({
+    edit: false,
+    editEmployeeName: '',
+    editEmployeeEmail: '',
+    editEmployeePassword: '',
+    editEmployeePhone: '',
+    editEmployeeId: ''
+  })
+}
+
 generateEmployees = () => {
   let list = this.state.employees
 
   return list.map(
     employee => {
       return(
-        <div className="employee">
-          <p>Name: {employee.name}</p>
-          <p>Email: {employee.email}</p>
-          <p>Password: {employee.password}</p>
-          <p>Phone: {employee.phone}</p>
-          <button onClick={() => {this.deleteEmployee(employee)}}> Fire </button>
-
+        <div>
+          {!this.state.edit || this.state.editEmployeeId != employee.id ?
+            <div className="employee">
+              <p>Name: {employee.name}</p>
+              <p>RanK: {employee.rank}</p>
+              <p>Email: {employee.email}</p>
+              <p>Password: {employee.password}</p>
+              <p>Phone: {employee.phone}</p>
+              <button onClick={() => {this.deleteEmployee(employee)}}> Fire </button>
+              <button onClick={() => {this.editEmployee(employee)}}> Edit </button>
+            </div> :
+            <div>
+              Name: <input id="editEmployeeName" type="text" value={this.state.editEmployeeName} onChange={event => this.handleStuff(event)}/>
+              <br/>
+              <br/>
+              Rank: <input id="editEmployeeRank" type="text" value={this.state.editEmployeeRank} onChange={event => this.handleStuff(event)}/>
+              <br/>
+              <br/>
+              Email: <input id="editEmployeeEmail" type="text" value={this.state.editEmployeeEmail} onChange={event => this.handleStuff(event)}/>
+              <br/>
+              <br/>
+              Password: <input id="editEmployeePassword" type="text" value={this.state.editEmployeePassword} onChange={event => this.handleStuff(event)}/>
+              <br/>
+              <br/>
+              Phone: <input id="editEmployeePhone" type="integer" value={this.state.editEmployeePhone} onChange={event => this.handleStuff(event)}/>
+              <br/>
+              <br/>
+              {!this.state.edit ? <button onClick={() => {this.editEmployee(employee)}}> Edit </button> :
+              <button onClick={() => {this.submitEmployeeEdit(employee)}}> Submit Edit </button>
+              }
+              <button onClick={this.cancelEdit}> Cancel </button>
+            </div>
+          }
         </div>
       )
       // return (
