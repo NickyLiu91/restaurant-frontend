@@ -22,7 +22,8 @@ class CreateAccount extends React.Component {
     createType: 'account',
     dropDown: false,
     employee: 'Employee',
-    employees: []
+    employees: [],
+    employeeAction: 'Add'
   }
 
 

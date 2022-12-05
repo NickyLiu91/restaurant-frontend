@@ -7,3 +7,8 @@
   border-top: solid 2px red;
   border-bottom: solid 2px red;
 }
+
+img {
+  width: 100px;
+  height: 100px
+}

@@ -9,7 +9,8 @@ class RestaurantPage extends React.Component {
   state = {
     currentOrder: [],
     submittedCurrentOrder: {},
-    orders: []
+    orders: [],
+    restaurantId: ''
   }
 
   componentDidMount(){
@@ -18,9 +19,15 @@ class RestaurantPage extends React.Component {
       let adjustedAddress = this.props.match.url.slice(0, -7)
       restaurantId = adjustedAddress.slice(12)
       this.props.changeLocation("online")
+      this.setState({
+        restaurantId: restaurantId
+      })
     } else {
       restaurantId = this.props.match.url.slice(12)
       this.props.changeLocation("offline")
+      this.setState({
+        restaurantId: restaurantId
+      })
     }
 
     fetch(`http://localhost:3000/api/restaurants/menu/${restaurantId}`)
@@ -40,6 +47,7 @@ class RestaurantPage extends React.Component {
         return (
           <div>
             <p>Name: {item.name}</p>
+            <img src={require(`../images/restaurant${this.state.restaurantId}/${item.image}`)} />
             <p>Price: {parseFloat(item.price)}</p>
             {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.addToOrder(item)}}> + </button> : null}
           </div>
