@@ -23,7 +23,12 @@ class CreateAccount extends React.Component {
     dropDown: false,
     employee: 'Employee',
     employees: [],
-    employeeAction: 'Add'
+    edit: false,
+    editEmployeeName: '',
+    editEmployeeEmail: '',
+    editEmployeePassword: '',
+    editEmployeePhone: '',
+    editEmployeeId: ''
   }
 
 
@@ -124,28 +129,79 @@ class CreateAccount extends React.Component {
        }
       })
       .then(res => res.json())
-      .then(json => {this.setState({
+      .then(json => {
+        console.log(json)
+        this.setState({
           employees: json.accounts
-        })
+        }, () => {console.log("???????????")})
       })
   }
 }
 
- generateEmployees = () => {
-   let employeeList = this.state.employees
+deleteEmployee = (employee) => {
+  fetch(`http://localhost:3000/api/accounts/${employee.id}`, {
+    method: 'DELETE',
+    headers: {
+       'Content-Type': 'application/json',
+       'Accept': 'application/json',
+       Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    }
+  })
+  .then(res => {
+    let newAccounts = this.state.employees
+    let matchingItemIndex = this.state.employees.findIndex(account => account.id == employee.id)
+    newAccounts.splice(matchingItemIndex, 1)
+  })
+}
 
-   return employeeList.map(
-     employee => {
-       return (
-         <Dropdown.Item value={employee.id}>{employee.name}</Dropdown.Item>
-       )
-     }
-   )
+generateEmployees = () => {
+  let list = this.state.employees
 
- }
+  return list.map(
+    employee => {
+      return(
+        <div className="employee">
+          <p>Name: {employee.name}</p>
+          <p>Email: {employee.email}</p>
+          <p>Password: {employee.password}</p>
+          <p>Phone: {employee.phone}</p>
+          <button onClick={() => {this.deleteEmployee(employee)}}> Fire </button>
+
+        </div>
+      )
+      // return (
+      //   <div>
+      //     {!this.state.edit || this.state.editItemId != item.id ?
+      //       <div>
+      //         <p>Name: {item.name}</p>
+      //         <img src={require(`../images/restaurant${this.props.restaurant.id}/${item.image}`)} />
+      //         <p>Price: {parseFloat(item.price)}</p>
+      //         <button onClick={() => {this.deleteItem(item)}}> - </button>
+      //         <button onClick={() => {this.editItem(item)}}> Edit </button>
+      //       </div> :
+      //       <div>
+      //         Name: <input id="editItemName" type="text" value={this.state.editItemName} onChange={event => this.handleStuff(event)}/>
+      //         <br/>
+      //         <br/>
+      //         Price: <input id="editItemPrice" type="integer" value={this.state.editItemPrice} onChange={event => this.handleStuff(event)}/>
+      //         <br/>
+      //         <br/>
+      //         Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/>
+      //         <br/>
+      //         <br/>
+      //         {!this.state.edit ? <button onClick={() => {this.editItem(item)}}> Edit </button> :
+      //         <button onClick={() => {this.submitItemEdit(item)}}> Submit Edit </button>
+      //         }
+      //         <button onClick={this.cancelEdit}> Cancel </button>
+      //       </div>
+      //     }
+      //   </div>
+      // )
+    }
+  )
+}
 
   render() {
-    const ranks = ["Owner", "Employee"]
 
     if (Object.keys(this.props.account).length != 0) {
         return(
@@ -182,15 +238,8 @@ class CreateAccount extends React.Component {
               <br/>
 
               <div>
-                <h2>Edit Employees</h2>
-                <div>
-                  <h3>List of Employees</h3>
-                  <DropdownButton id="dropdown-basic-button" title={this.state.employee}>
+                <h2>Employees List</h2>
                   {this.generateEmployees()}
-                  </DropdownButton>
-                  <br/>
-                  <br/>
-                </div>
               </div>
               <br/>
               <br/>

@@ -12,3 +12,8 @@ img {
   width: 100px;
   height: 100px
 }
+
+.employee {
+  border-top: solid 5px black;
+  border-bottom: solid 5px black
+}
