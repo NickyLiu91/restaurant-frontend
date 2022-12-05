@@ -8,7 +8,12 @@ class ManageRestaurant extends React.Component {
   state = {
     name: '',
     price: '',
-    image: ''
+    image: '',
+    edit: false,
+    editItemName: '',
+    editItemPrice: '',
+    editItemImage: '',
+    editItemId: ''
   }
 
   // componentDidMount(){
@@ -67,23 +72,96 @@ class ManageRestaurant extends React.Component {
         Authorization: `Bearer ${localStorage.getItem('jwt')}`
      }
    })
+   .then(res => {
+     let newMenu = this.props.menu
+     console.log(newMenu)
+     let deletedIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+     console.log(deletedIndex)
+     newMenu.splice(deletedIndex, 1)
+     console.log(newMenu)
+
+     this.props.changeMenu(newMenu)
+
+
+   })
  }
+
+
+  editItem = (item) => {
+    this.setState({
+      edit: true,
+      editItemName: item.name,
+      editItemPrice: item.price,
+      editItemImage: item.image,
+      editItemId: item.id
+    })
+    // console.log(item)
+    // fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
+    //   method: 'PUTS',
+    //   headers: {
+    //      'Content-Type': 'application/json',
+    //      'Accept': 'application/json',
+    //      Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    //   }
+    // })
+    // .then(res => {
+    //   let newMenu = this.props.menu
+    //   console.log(newMenu)
+    //   let deletedIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+    //   console.log(deletedIndex)
+    //   newMenu.splice(deletedIndex, 1)
+    //   console.log(newMenu)
+    //
+    //   this.props.changeMenu(newMenu)
+
+
+    // })
+  }
 
  generateMenu = () => {
    let list = this.props.menu
+   console.log(list)
 
    return list.map(
      item => {
        return (
          <div>
-           <p>Name: {item.name}</p>
-           <img src={require(`../images/restaurant${this.props.restaurant.id}/${item.image}`)} />
-           <p>Price: {parseFloat(item.price)}</p>
-           <button onClick={() => {this.deleteItem(item)}}> - </button>
+           {!this.state.edit || this.state.editItemId != item.id ?
+             <div>
+               <p>Name: {item.name}</p>
+               <img src={require(`../images/restaurant${this.props.restaurant.id}/${item.image}`)} />
+               <p>Price: {parseFloat(item.price)}</p>
+               <button onClick={() => {this.deleteItem(item)}}> - </button>
+               <button onClick={() => {this.editItem(item)}}> Edit </button>
+             </div> :
+             <div>
+               Name: <input id="editItemName" type="text" value={this.state.editItemName} onChange={event => this.handleStuff(event)}/>
+               <br/>
+               <br/>
+               Price: <input id="editItemPrice" type="integer" value={this.state.editItemPrice} onChange={event => this.handleStuff(event)}/>
+               <br/>
+               <br/>
+               Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/>
+               <br/>
+               <br/>
+               <button onClick={() => {this.editItem(item)}}> Edit </button>
+               <button onClick={this.cancelEdit}> Cancel </button>
+             </div>
+           }
          </div>
        )
      }
    )
+ }
+
+ cancelEdit = () => {
+   this.setState({
+     edit: true,
+     editItemName: '',
+     editItemPrice: '',
+     editItemImage: '',
+     editItemId: ''
+   })
  }
 
   render() {
