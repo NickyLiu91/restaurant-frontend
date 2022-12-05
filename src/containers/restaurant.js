@@ -155,8 +155,8 @@ class RestaurantPage extends React.Component {
   }
 
   render() {
-    // console.log(this.state)
-    if (Object.keys(this.props.restaurant).length != 0 && Object.keys(this.props.account).length != 0) {
+    if ((Object.keys(this.props.restaurant).length != 0 && Object.keys(this.props.account).length != 0) &&
+  (this.props.account.id == this.props.restaurant.account.id)) {
       return(
         <div>
           <div>
