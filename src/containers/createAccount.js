@@ -149,8 +149,12 @@ deleteEmployee = (employee) => {
   })
   .then(res => {
     let newAccounts = this.state.employees
+    console.log(newAccounts)
     let matchingItemIndex = this.state.employees.findIndex(account => account.id == employee.id)
     newAccounts.splice(matchingItemIndex, 1)
+    this.setState({
+      employees: newAccounts
+    })
   })
 }
 
