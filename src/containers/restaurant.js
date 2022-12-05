@@ -7,7 +7,9 @@ import {v4 as uuidv4} from 'uuid'
 class RestaurantPage extends React.Component {
 
   state = {
-    currentOrder: []
+    currentOrder: [],
+    submittedCurrentOrder: {},
+    orders: []
   }
 
   componentDidMount(){
@@ -55,7 +57,8 @@ class RestaurantPage extends React.Component {
   }
 
   removeOrderItem = (item) => {
-    if (item.status == "Not Started") {
+
+    if (Object.keys(this.state.submittedCurrentOrder).length == 0 ) {
       let newOrderList = this.state.currentOrder
       let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.id == item.id)
 
@@ -63,9 +66,21 @@ class RestaurantPage extends React.Component {
       this.setState({
         currentOrder: newOrderList
       })
-    } else {
-      alert("That item is currently being prepared and cannot be cancelled.")
     }
+    // else {
+      // alert("That item is currently being prepared and cannot be cancelled.")
+    //   fetch(`http://localhost:3000/api/orders/${this.state.currentOrder.id}`, {
+    //      method: 'GET',
+    //      headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json',
+    //         Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    //      }})
+    //      .then(res => res.json())
+    //      .then(res => console.log(res))
+    // }
+
+    // Allow access to edit when not loggedin?
   }
 
   generateOrderItems = (order) => {
@@ -98,20 +113,32 @@ class RestaurantPage extends React.Component {
   }
 
   generateCurrentOrder = () => {
-    let list = this.state.currentOrder
-    let totalPrice = 0
+    let list
+    if (Object.keys(this.state.submittedCurrentOrder).length != 0) {
+      list = this.state.submittedCurrentOrder.orderItems
 
-    // let newArray = list.map(item => {return item.name})
+      return list.map(
+        orderItem => {
+          return (
+            <div>
+              <OrderItem key={orderItem.id} orderItem={orderItem} removeOrderItem={this.removeOrderItem}/>
+            </div>
+          )
+        }
+      )
+    } else {
+      list = this.state.currentOrder
 
-    return list.map(
-      orderItem => {
-        return (
-          <div>
-            <OrderItem key={orderItem.id} orderItem={orderItem} removeOrderItem={this.removeOrderItem}/>
-          </div>
-        )
-      }
-    )
+      return list.map(
+        orderItem => {
+          return (
+            <div>
+              <OrderItem key={orderItem.id} orderItem={orderItem} removeOrderItem={this.removeOrderItem}/>
+            </div>
+          )
+        }
+      )
+    }
   }
 
   submitOrder = () => {
@@ -142,22 +169,17 @@ class RestaurantPage extends React.Component {
     .then(res => res.json())
     .then(json => {
       this.setState({
-        currentOrder: json.orderItems
+        submittedCurrentOrder: json
       })
     })
   }
 
   changeOrderItemStatus = (order, orderItem, event) => {
-    console.log(order)
-    console.log(orderItem)
-    console.log(order.orderItems)
-
     let currentOrderItems = order.orderItems
     let matchingItemIndex = currentOrderItems.findIndex(existingItem => existingItem.id == orderItem.id)
-    console.log(currentOrderItems[matchingItemIndex].status)
+
     currentOrderItems[matchingItemIndex].status = event.target.text
-    console.log(currentOrderItems[matchingItemIndex].status)
-    console.log(currentOrderItems)
+
     // fetch(`http://localhost:3000/api/orders/${order.id}`, {
     //    method: 'GET',
     //    headers: {
@@ -184,7 +206,7 @@ class RestaurantPage extends React.Component {
     .then(res => res.json())
     .then(json => {
       let currentOrders = this.props.orders
-      console.log(currentOrders)
+
       let matchingOrderIndex = currentOrders.findIndex(existingOrder => existingOrder.id == json.id)
       currentOrders[matchingOrderIndex] = json
       this.props.changeOrders(currentOrders)
@@ -193,7 +215,6 @@ class RestaurantPage extends React.Component {
   }
 
   render() {
-    console.log(this.props.restaurant.accounts)
     // console.log(this.props.restaurant.accounts.find(account => account.id == this.props.account.id))
     if ((Object.keys(this.props.restaurant).length != 0 && Object.keys(this.props.account).length != 0) &&
   ((this.props.account.id == this.props.restaurant.account.id) || this.props.restaurant.accounts.find(account => account.id == this.props.account.id))) {

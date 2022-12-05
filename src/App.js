@@ -8,6 +8,8 @@ import Restaurant from './containers/restaurant.js';
 import Navbar from './containers/navbar.js';
 import LoginPage from './containers/loginPage.js';
 import AdminPage from './containers/adminPage';
+import CreateAccount from './containers/createAccount';
+import ManageRestaurant from './containers/manageRestaurant';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 class App extends React.Component {
@@ -20,6 +22,8 @@ class App extends React.Component {
           <Route path="/restaurant/:id/:online?" component={Restaurant} />
           <Route path="/login" component={LoginPage} />
           <Route path="/admin" component={AdminPage} />
+          <Route path="/createAccount" component={CreateAccount} />
+          <Route path="/manageRestaurant" component={ManageRestaurant} />
         </Switch>
       </div>
     )
