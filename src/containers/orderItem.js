@@ -6,15 +6,16 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 const OrderItem = (props) => {
   return (
     <div className="orderItem">
+      <p>ID: {props.orderItem.id}</p>
       <p>name: {props.orderItem.name}</p>
       <p>Price: {props.orderItem.price}</p>
       <p>Status: {props.orderItem.status}</p>
       <div id="restaurants">
         <p>Status</p>
         <DropdownButton id="dropdown-basic-button" title={props.orderItem.status}>
-          <Dropdown.Item value={"Not Started"}>{"Not Started"}</Dropdown.Item>
-          <Dropdown.Item value={"In Progress"}>{"In Progress"}</Dropdown.Item>
-          <Dropdown.Item value={"Complete"}>{"Complete"}</Dropdown.Item>
+          <Dropdown.Item value="Not Started" onClick={(event) => {props.changeOrderItemStatus(props.order, props.orderItem, event)}}>"Not Started"</Dropdown.Item>
+          <Dropdown.Item value="In Progress" onClick={(event) => {props.changeOrderItemStatus(props.order, props.orderItem, event)}}>"In Progress"</Dropdown.Item>
+          <Dropdown.Item value="Complete" onClick={(event) => {props.changeOrderItemStatus(props.order, props.orderItem, event)}}>"Complete"</Dropdown.Item>
         </DropdownButton>
         <br/>
         <br/>

@@ -1,9 +1,9 @@
 .order {
   border-top: solid 5px black;
-  /*border-bottom: solid 5px black*/
+  border-bottom: solid 5px black
 }
 
 .orderItem {
-  /*border-top: solid 2px red;*/
+  border-top: solid 2px red;
   border-bottom: solid 2px red;
 }

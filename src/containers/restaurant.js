@@ -7,11 +7,6 @@ import {v4 as uuidv4} from 'uuid'
 class RestaurantPage extends React.Component {
 
   state = {
-    account: this.props.account,
-    restaurant: {},
-    menu: [],
-    orders: [],
-    guest: false,
     currentOrder: []
   }
 
@@ -75,13 +70,11 @@ class RestaurantPage extends React.Component {
 
   generateOrderItems = (order) => {
     let list = order.orderItems
-    console.log(list)
 
     return list.map(
       orderItem => {
-        console.log("111")
         return (
-          <OrderItem key={orderItem.id} orderItem={orderItem} removeOrderItem={this.removeOrderItem}/>
+          <OrderItem key={orderItem.id} order={order} orderItem={orderItem} removeOrderItem={this.removeOrderItem} changeOrderItemStatus={this.changeOrderItemStatus}/>
         )
       }
     )
@@ -94,6 +87,7 @@ class RestaurantPage extends React.Component {
       order => {
         return (
           <div className="order">
+            <p>ID: {order.id}</p>
             {this.generateOrderItems(order)}
             <p>Total Price: {order.totalPrice}</p>
             <p>Status: {order.status}</p>
@@ -147,10 +141,54 @@ class RestaurantPage extends React.Component {
     })
     .then(res => res.json())
     .then(json => {
-      console.log(json)
       this.setState({
         currentOrder: json.orderItems
       })
+    })
+  }
+
+  changeOrderItemStatus = (order, orderItem, event) => {
+    console.log(order)
+    console.log(orderItem)
+    console.log(order.orderItems)
+
+    let currentOrderItems = order.orderItems
+    let matchingItemIndex = currentOrderItems.findIndex(existingItem => existingItem.id == orderItem.id)
+    console.log(currentOrderItems[matchingItemIndex].status)
+    currentOrderItems[matchingItemIndex].status = event.target.text
+    console.log(currentOrderItems[matchingItemIndex].status)
+    console.log(currentOrderItems)
+    // fetch(`http://localhost:3000/api/orders/${order.id}`, {
+    //    method: 'GET',
+    //    headers: {
+    //       'Content-Type': 'application/json',
+    //       'Accept': 'application/json',
+    //       Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    //    }})
+    //    .then(res => res.json())
+    //    .then(res => console.log(res))
+
+    fetch(`http://localhost:3000/api/orders/${order.id}`, {
+       method: 'PUT',
+       headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+       },
+       body: JSON.stringify(
+       {
+         orderItems: currentOrderItems
+       }
+      )
+    })
+    .then(res => res.json())
+    .then(json => {
+      let currentOrders = this.props.orders
+      console.log(currentOrders)
+      let matchingOrderIndex = currentOrders.findIndex(existingOrder => existingOrder.id == json.id)
+      currentOrders[matchingOrderIndex] = json
+      this.props.changeOrders(currentOrders)
+
     })
   }
 
