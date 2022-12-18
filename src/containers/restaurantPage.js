@@ -24,6 +24,7 @@ class RestaurantPage extends React.Component {
     this.setState({
       restaurantId: restaurantId
     })
+
     if (this.props.match.url.slice(-6) == "online"){
       let adjustedAddress = this.props.match.url.slice(0, -7)
       this.props.changeLocation("online")
@@ -34,7 +35,6 @@ class RestaurantPage extends React.Component {
     fetch(`http://localhost:3000/api/restaurants/${restaurantId}/menu`)
     .then(res => res.json())
     .then(json => {
-      console.log(json)
       this.props.changeRestaurant(json)
       this.props.changeMenu(json.menuitems)
       this.props.changeOrders(json.orders)
@@ -231,6 +231,7 @@ class RestaurantPage extends React.Component {
   ((this.props.account.id == this.props.restaurant.account.id) || this.props.restaurant.accounts.find(account => account.id == this.props.account.id))) {
       return(
         <div>
+        <button onClick={() => {console.log(this.props)}}>State</button>
           <div>
             <h1>MENU</h1>
             {this.generateMenu()}
@@ -246,6 +247,7 @@ class RestaurantPage extends React.Component {
     } else if (Object.keys(this.props.restaurant).length != 0) {
       return(
         <div>
+                <button onClick={() => {console.log(this.props)}}>State</button>
           <div>
             <h1>MENU</h1>
             {this.generateMenu()}
