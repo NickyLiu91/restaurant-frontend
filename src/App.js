@@ -19,11 +19,12 @@ class App extends React.Component {
         <Navbar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/restaurants/:id/:online?" component={RestaurantPage} />
+          <Route exact path="/restaurants/:id/" component={RestaurantPage} />
+          <Route exact path="/restaurants/:id/online" component={RestaurantPage} />
           <Route path="/login" component={LoginPage} />
-          <Route path="/restaurants/:id/admin" component={AdminPage} />
-          <Route path="/restaurants/:id/createAccount" component={CreateAccount} />
-          <Route path="/restaurants/:id/manageRestaurant" component={ManageRestaurant} />
+          <Route exact path="/restaurants/:id/admin" component={AdminPage} />
+          <Route exact path="/restaurants/:id/createAccount" component={CreateAccount} />
+          <Route exact path="/restaurants/:id/manageRestaurant" component={ManageRestaurant} />
         </Switch>
       </div>
     )
