@@ -1,6 +1,7 @@
 import React from 'react';
 import CreateAccount from './createAccount';
 import ManageRestaurant from './manageRestaurant';
+import {connect} from 'react-redux'
 
 class AdminPage extends React.Component {
 
@@ -14,16 +15,29 @@ class AdminPage extends React.Component {
   //   }
   // }
 
+  componentDidMount(){
+    console.log(this.props)
+  }
+
   render() {
     return(
       <div>
-        <button onClick={() => {this.props.history.push("/createAccount")}}>Manage Employees</button>
+        <button onClick={() => {this.props.history.push(`/restaurant/${this.props.restaurant.id}/createAccount`)}}>Manage Employees</button>
         <br/>
         <br/>
-        <button onClick={() => {this.props.history.push("/manageRestaurant")}}>Manage Restaurant</button>
+        <button onClick={() => {this.props.history.push(`/restaurant/${this.props.restaurant.id}/manageRestaurant`)}}>Manage Restaurant</button>
       </div>
     )
   }
 }
 
-export default AdminPage
+const mapStateToProps = state => {
+  return {
+    restaurant: state.restaurantChanger.restaurant
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(AdminPage)

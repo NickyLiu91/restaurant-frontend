@@ -1,7 +1,7 @@
 import React from 'react';
 import AdminPage from './adminPage';
 import LoginPage from './loginPage';
-import Restaurant from './restaurant';
+import RestaurantPage from './restaurantPage';
 import {connect} from 'react-redux'
 
 class Home extends React.Component {

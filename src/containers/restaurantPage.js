@@ -23,7 +23,7 @@ class RestaurantPage extends React.Component {
         restaurantId: restaurantId
       })
     } else {
-      restaurantId = this.props.match.url.slice(12)
+      restaurantId = this.props.match.url.slice(13)
       this.props.changeLocation("offline")
       this.setState({
         restaurantId: restaurantId
@@ -41,6 +41,7 @@ class RestaurantPage extends React.Component {
   }
 
   generateMenu = () => {
+    console.log(this.state)
     let list = this.props.menu
 
     return list.map(

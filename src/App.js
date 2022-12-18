@@ -4,7 +4,7 @@ import { Route, Routes, Switch, Redirect, withRouter} from 'react-router-dom'
 import { connect } from 'react-redux'
 import {compose} from 'redux';
 import Home from './containers/home.js';
-import Restaurant from './containers/restaurant.js';
+import RestaurantPage from './containers/restaurantPage.js';
 import Navbar from './containers/navbar.js';
 import LoginPage from './containers/loginPage.js';
 import AdminPage from './containers/adminPage';
@@ -19,11 +19,11 @@ class App extends React.Component {
         <Navbar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/restaurant/:id/:online?" component={Restaurant} />
+          <Route path="/restaurants/:id/:online?" component={RestaurantPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/admin" component={AdminPage} />
-          <Route path="/createAccount" component={CreateAccount} />
-          <Route path="/manageRestaurant" component={ManageRestaurant} />
+          <Route path="/restaurants/:id/createAccount" component={CreateAccount} />
+          <Route path="/restaurants/:id/manageRestaurant" component={ManageRestaurant} />
         </Switch>
       </div>
     )
