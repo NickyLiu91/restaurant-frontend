@@ -21,7 +21,7 @@ class App extends React.Component {
           <Route exact path="/" component={Home} />
           <Route path="/restaurants/:id/:online?" component={RestaurantPage} />
           <Route path="/login" component={LoginPage} />
-          <Route path="/admin" component={AdminPage} />
+          <Route path="/restaurants/:id/admin" component={AdminPage} />
           <Route path="/restaurants/:id/createAccount" component={CreateAccount} />
           <Route path="/restaurants/:id/manageRestaurant" component={ManageRestaurant} />
         </Switch>

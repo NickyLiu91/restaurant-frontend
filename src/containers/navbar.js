@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {compose} from 'redux';
 import { Route, Link, withRouter } from 'react-router-dom'
-import AdminPage from './adminPage';
 
 class NavBar extends React.Component {
 
@@ -30,7 +29,7 @@ class NavBar extends React.Component {
   logOut = () => {
     localStorage.removeItem('jwt');
     this.props.changeAccount({})
-    this.props.history.push(`/restaurant/${this.props.restaurant.id}`)
+    this.props.history.push(`/restaurants/${this.props.restaurant.id}`)
   }
 
   render(){
@@ -43,7 +42,7 @@ class NavBar extends React.Component {
             {localStorage.getItem('jwt') && (this.props.account.rank == 'Admin'
           || (Object.keys(this.props.account).length != 0 && Object.keys(this.props.restaurant).length != 0)
            && (this.props.account.id == this.props.restaurant.account.id))
-           ? <p onClick={() => {this.props.history.push("/admin")}}>Admin</p> : null }
+           ? <p onClick={() => {this.props.history.push(`/restaurants/${this.props.restaurant.id}/admin`)}}>Admin</p> : null }
           </div>
           <div>
             {!localStorage.getItem('jwt') ? <p onClick={() => {this.props.history.push("/login")}}>LogIn</p> : <p onClick={() => {this.logOut()}}>LogOut</p>}

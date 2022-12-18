@@ -14,20 +14,21 @@ class RestaurantPage extends React.Component {
   }
 
   componentDidMount(){
-    let restaurantId
+    let url = this.props.match.url.slice(13)
+    let restaurantId = ""
+    let index = 0
+    while (url[index] != "/" && index < url.length) {
+      restaurantId += url[index]
+      index ++
+    }
+    this.setState({
+      restaurantId: restaurantId
+    })
     if (this.props.match.url.slice(-6) == "online"){
       let adjustedAddress = this.props.match.url.slice(0, -7)
-      restaurantId = adjustedAddress.slice(12)
       this.props.changeLocation("online")
-      this.setState({
-        restaurantId: restaurantId
-      })
     } else {
-      restaurantId = this.props.match.url.slice(13)
       this.props.changeLocation("offline")
-      this.setState({
-        restaurantId: restaurantId
-      })
     }
 
     fetch(`http://localhost:3000/api/restaurants/${restaurantId}/menu`)

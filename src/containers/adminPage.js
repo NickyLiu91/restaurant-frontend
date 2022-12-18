@@ -22,10 +22,10 @@ class AdminPage extends React.Component {
   render() {
     return(
       <div>
-        <button onClick={() => {this.props.history.push(`/restaurant/${this.props.restaurant.id}/createAccount`)}}>Manage Employees</button>
+        <button onClick={() => {this.props.history.push(`/restaurants/${this.props.restaurant.id}/createAccount`)}}>Manage Employees</button>
         <br/>
         <br/>
-        <button onClick={() => {this.props.history.push(`/restaurant/${this.props.restaurant.id}/manageRestaurant`)}}>Manage Restaurant</button>
+        <button onClick={() => {this.props.history.push(`/restaurants/${this.props.restaurant.id}/manageRestaurant`)}}>Manage Restaurant</button>
       </div>
     )
   }
