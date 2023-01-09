@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import axios from "axios"
 
@@ -22,16 +22,21 @@ const CARD_OPTIONS = {
 	}
 }
 
-export default function PaymentForm() {
-  const [success, setSuccess] = useState(false)
-  const stripe = useStripe()
-  const elements = useElements()
+class PaymentForm extends React.Component {
 
-  const handleSubmit = async (e) => {
+  state = {
+    success: false,
+    pay: false
+  }
+
+  // let stripe = this.useStripe()
+  // let elements = useElements()
+
+  handleSubmit = async (e) => {
     e.preventDefault()
-    const [error, paymentMethod] = await stripe.createPaymentMethod({
+    const [error, paymentMethod] = await useStripe.createPaymentMethod({
       type: "card",
-      card: elements.getElement(CardElement)
+      card: useElements.getElement(CardElement)
     })
 
   if(!error) {
@@ -62,7 +67,10 @@ export default function PaymentForm() {
 
       if(response.data.success) {
         console.log("Successful payment! ")
-        setSuccess(true)
+        // setSuccess(true)
+        this.setState({
+          success: true
+        })
       }
 
     } catch (error) {
@@ -73,22 +81,31 @@ export default function PaymentForm() {
   }
 }
 
-  return (
-    <>
-      (!success ?
-        <form onSubmit={handleSubmit}>
-          <fieldset className="FormGroup">
-            <div className="FormRow">
-              <CardElement options={CARD_OPTIONS}/>
-            </div>
-          </fieldset>
-          <button>Pay</button>
-        </form>
-        :
+  render() {
+    if (!this.state.success) {
+      return (
+        <>
+          <form onSubmit={this.handleSubmit}>
+            <fieldset className="FormGroup">
+              <div className="FormRow">
+                <CardElement options={CARD_OPTIONS}/>
+              </div>
+            </fieldset>
+            <button>Pay</button>
+          </form>
+        </>
+      )
+    } else {
+      return (
+        <>
         <div>
           <h2>Purchase Successful!</h2>
         </div>
+        </>
       )
-    </>
-  )
+    }
+
+  }
 }
+
+export default PaymentForm
