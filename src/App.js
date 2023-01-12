@@ -10,7 +10,7 @@ import LoginPage from './containers/loginPage.js';
 import AdminPage from './containers/adminPage';
 import CreateAccount from './containers/createAccount';
 import ManageRestaurant from './containers/manageRestaurant';
-import StripeContainer from './containers/stripeContainer';
+import StripeButton from './containers/stripeButton';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 class App extends React.Component {
@@ -26,7 +26,7 @@ class App extends React.Component {
           <Route exact path="/restaurants/:id/admin" component={AdminPage} />
           <Route exact path="/restaurants/:id/createAccount" component={CreateAccount} />
           <Route exact path="/restaurants/:id/manageRestaurant" component={ManageRestaurant} />
-          <Route exact path="/stripe" component={StripeContainer} />
+          <Route exact path="/stripe" component={StripeButton} />
         </Switch>
       </div>
     )
