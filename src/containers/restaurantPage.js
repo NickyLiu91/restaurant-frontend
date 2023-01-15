@@ -3,6 +3,8 @@ import { Route, Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import OrderItem from './orderItem';
 import {v4 as uuidv4} from 'uuid'
+import StripeCheckoutPage from './stripeCheckoutPage'
+
 
 class RestaurantPage extends React.Component {
 
@@ -225,6 +227,21 @@ class RestaurantPage extends React.Component {
     })
   }
 
+  inputPaymentInfo = () => {
+    this.setState({
+      stripe: !this.state.stripe
+    })
+  }
+
+  confirmPayment = (token) => {
+    if (token) {
+      this.submitOrder()
+    }
+    // this.setState({
+    //
+    // })
+  }
+
   render() {
     // console.log(this.props.restaurant.accounts.find(account => account.id == this.props.account.id))
     if ((Object.keys(this.props.restaurant).length != 0 && Object.keys(this.props.account).length != 0) &&
@@ -247,17 +264,18 @@ class RestaurantPage extends React.Component {
     } else if (Object.keys(this.props.restaurant).length != 0) {
       return(
         <div>
-                <button onClick={() => {console.log(this.props)}}>State</button>
-          <div>
-            <h1>MENU</h1>
-            {this.generateMenu()}
-            <button onClick={() => {this.submitOrder()}}>Submit Order</button>
-          </div>
-          <div>
-            <h1>Current Order</h1>
-            {this.generateCurrentOrder()}
-          </div>
+          <button onClick={() => {console.log(this.props)}}>State</button>
+        <div>
+          <h1>MENU</h1>
+          {this.generateMenu()}
         </div>
+        <div>
+          <h1>Current Order</h1>
+          {this.generateCurrentOrder()}
+        </div>
+        <button onClick={() => {this.inputPaymentInfo()}}>Input Payment</button>
+        <StripeCheckoutPage confirmPayment={this.confirmPayment}/>
+      </div>
       )
     } else {
       return(
