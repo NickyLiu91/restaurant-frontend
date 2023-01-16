@@ -28,7 +28,7 @@ class App extends React.Component {
           <Route exact path="/restaurants/:id/createAccount" component={CreateAccount} />
           <Route exact path="/restaurants/:id/manageRestaurant" component={ManageRestaurant} />
           {/*<Route exact path="/stripe" component={StripeCheckoutPage} />*/}
-          <Route exact path="/stripe" component={StripeContainer} />
+          {/*<Route exact path="/stripe" component={StripeContainer} />*/}
         </Switch>
       </div>
     )

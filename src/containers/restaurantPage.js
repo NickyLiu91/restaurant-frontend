@@ -3,7 +3,9 @@ import { Route, Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import OrderItem from './orderItem';
 import {v4 as uuidv4} from 'uuid'
-import StripeCheckoutPage from './stripeCheckoutPage'
+// import StripeCheckoutPage from './stripeCheckoutPage'
+import StripeContainer from './stripeContainer'
+
 
 
 class RestaurantPage extends React.Component {
@@ -12,7 +14,8 @@ class RestaurantPage extends React.Component {
     currentOrder: [],
     submittedCurrentOrder: {},
     orders: [],
-    restaurantId: ''
+    restaurantId: '',
+    currentOrderPrice: 0
   }
 
   componentDidMount(){
@@ -63,21 +66,33 @@ class RestaurantPage extends React.Component {
 
   addToOrder = (item) => {
     let newOrderList = this.state.currentOrder
+    let newOrderPrice = 0
+
     newOrderList = [...newOrderList, {name: item.name, price: parseFloat(item.price), id: uuidv4(), status: "Not Started"}]
+
+    newOrderList.forEach(item => {newOrderPrice += parseFloat(item.price)})
+
     this.setState({
-      currentOrder: newOrderList
+      currentOrder: newOrderList,
+      currentOrderPrice: newOrderPrice
     })
   }
 
   removeOrderItem = (item) => {
+
+    let newOrderPrice = 0
 
     if (Object.keys(this.state.submittedCurrentOrder).length == 0 ) {
       let newOrderList = this.state.currentOrder
       let matchingItemIndex = newOrderList.findIndex(existingItem => existingItem.id == item.id)
 
       newOrderList.splice(matchingItemIndex, 1)
+
+      newOrderList.forEach(item => {newOrderPrice += parseFloat(item.price)})
+
       this.setState({
-        currentOrder: newOrderList
+        currentOrder: newOrderList,
+        currentOrderPrice: newOrderPrice
       })
     }
     // else {
@@ -237,9 +252,6 @@ class RestaurantPage extends React.Component {
     if (token) {
       this.submitOrder()
     }
-    // this.setState({
-    //
-    // })
   }
 
   render() {
@@ -273,8 +285,10 @@ class RestaurantPage extends React.Component {
           <h1>Current Order</h1>
           {this.generateCurrentOrder()}
         </div>
+        <p>Total Price: {this.state.currentOrderPrice}</p>
         <button onClick={() => {this.inputPaymentInfo()}}>Input Payment</button>
-        <StripeCheckoutPage confirmPayment={this.confirmPayment}/>
+        {/*<StripeCheckoutPage confirmPayment={this.confirmPayment}/>*/}
+        <StripeContainer />
       </div>
       )
     } else {
