@@ -23,10 +23,11 @@ const CARD_OPTIONS = {
 	}
 }
 
-export default function PaymentForm() {
+export default function PaymentForm(props) {
     const [success, setSuccess ] = useState(false)
     const stripe = useStripe()
     const elements = useElements()
+    let convertedPrice = props.currentOrderPrice * 100
 
 
     const handleSubmit = async (e) => {
@@ -41,7 +42,7 @@ export default function PaymentForm() {
         try {
             const {id} = paymentMethod
             const response = await axios.post("http://localhost:4000/payment", {
-                amount: 1000,
+                amount: convertedPrice,
                 id
             })
 

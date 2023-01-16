@@ -172,9 +172,9 @@ class RestaurantPage extends React.Component {
   submitOrder = () => {
 
     let currentOrderCopy = this.state.currentOrder
-    let currentPrice = 0
+    // let currentPrice = 0
 
-    currentOrderCopy.forEach(item => {currentPrice += parseFloat(item.price)})
+    // currentOrderCopy.forEach(item => {currentPrice += parseFloat(item.price)})
 
     fetch(`http://localhost:3000/api/orders`, {
        method: 'POST',
@@ -189,7 +189,7 @@ class RestaurantPage extends React.Component {
             orderItems: currentOrderCopy,
             restaurant_id: this.props.restaurant.id,
             location: "online",
-            totalPrice: currentPrice
+            totalPrice: this.state.currentOrderPrice
          }
        }
       )
@@ -288,7 +288,7 @@ class RestaurantPage extends React.Component {
         <p>Total Price: {this.state.currentOrderPrice}</p>
         <button onClick={() => {this.inputPaymentInfo()}}>Input Payment</button>
         {/*<StripeCheckoutPage confirmPayment={this.confirmPayment}/>*/}
-        <StripeContainer />
+        <StripeContainer currentOrderPrice={this.state.currentOrderPrice}/>
       </div>
       )
     } else {
