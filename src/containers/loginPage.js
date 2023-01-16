@@ -36,7 +36,7 @@ class LoginPage extends React.Component {
   .then(json => {
     localStorage.setItem('jwt', json.jwt)
     this.props.changeAccount(json.account)
-    this.props.history.push(`/restaurant/${this.props.restaurant.id}`)
+    this.props.history.push(`/restaurants/${this.props.restaurant.id}`)
     })
   }
 
