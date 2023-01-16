@@ -49,6 +49,7 @@ export default function PaymentForm(props) {
             if(response.data.success) {
                 console.log("Successful payment")
                 setSuccess(true)
+                props.submitOrder()
             }
 
         } catch (error) {

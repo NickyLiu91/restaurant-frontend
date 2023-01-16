@@ -3,7 +3,6 @@ import { Route, Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 import OrderItem from './orderItem';
 import {v4 as uuidv4} from 'uuid'
-// import StripeCheckoutPage from './stripeCheckoutPage'
 import StripeContainer from './stripeContainer'
 
 
@@ -248,12 +247,6 @@ class RestaurantPage extends React.Component {
     })
   }
 
-  confirmPayment = (token) => {
-    if (token) {
-      this.submitOrder()
-    }
-  }
-
   render() {
     // console.log(this.props.restaurant.accounts.find(account => account.id == this.props.account.id))
     if ((Object.keys(this.props.restaurant).length != 0 && Object.keys(this.props.account).length != 0) &&
@@ -287,8 +280,7 @@ class RestaurantPage extends React.Component {
         </div>
         <p>Total Price: {this.state.currentOrderPrice}</p>
         <button onClick={() => {this.inputPaymentInfo()}}>Input Payment</button>
-        {/*<StripeCheckoutPage confirmPayment={this.confirmPayment}/>*/}
-        <StripeContainer currentOrderPrice={this.state.currentOrderPrice}/>
+        <StripeContainer currentOrderPrice={this.state.currentOrderPrice} submitOrder={this.submitOrder}/>
       </div>
       )
     } else {

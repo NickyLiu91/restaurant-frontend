@@ -10,7 +10,7 @@ const stripeTestPromise = loadStripe(PUBLIC_KEY)
 export default function StripeContainer(props) {
 	return (
 		<Elements stripe={stripeTestPromise}>
-			<PaymentForm currentOrderPrice={props.currentOrderPrice}/>
+			<PaymentForm currentOrderPrice={props.currentOrderPrice} submitOrder={props.submitOrder}/>
 		</Elements>
 	)
 }
