@@ -99,10 +99,6 @@ class ManageRestaurant extends React.Component {
   submitItemEdit = (item) => {
 
     const updatedItem = new FormData()
-    // updatedItem.append('menuitem', {})
-    // updatedItem.menuitem.append('name', this.state.editItemName);
-    // updatedItem.menuitem.append('price', this.state.editItemPrice);
-    // updatedItem.menuitem.append('image', this.state.editItemImage)
 
     let data = {
       menuitem: {
@@ -110,36 +106,13 @@ class ManageRestaurant extends React.Component {
         price: this.state.editItemPrice,
         image: this.state.editItemImage
       }
-      
     };
     
     for(let dataKey in data) {
-      if(dataKey === 'menuitem') {
-        // append nested object
-        for (let menuitemKey in data[dataKey]) {
-          updatedItem.append(`menuitem[${menuitemKey}]`, data[dataKey][menuitemKey]);
-        }
+      for (let menuitemKey in data[dataKey]) {
+        updatedItem.append(`menuitem[${menuitemKey}]`, data[dataKey][menuitemKey]);
       }
     }
-
-    // const updatedItem2 = new FormData()
-    // updatedItem2.append('menuitem', updatedItem)
-    // console.log(updatedItem2)
-
-  //   let updatedItemImage = {
-  //     'lastModified'     : this.state.editItemImage.lastModified,
-  //     'lastModifiedDate' : this.state.editItemImage.lastModifiedDate,
-  //     'name'             : this.state.editItemImage.name,
-  //     'size'             : this.state.editItemImage.size,
-  //     'type'             : this.state.editItemImage.type
-  //  }; 
-
-   
-
-  //  console.log(updatedItemImage.file)
-
-  //  let stringifiedItemImage = JSON.stringify(updatedItemImage)
-  //  console.log(stringifiedItemImage)
 
     fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
       method: 'PUT',
@@ -156,7 +129,6 @@ class ManageRestaurant extends React.Component {
     //   }
     //  )
       body: updatedItem
-      // body: {"menuitem": updatedItem}
       
    })
     .then(res => res.json())
