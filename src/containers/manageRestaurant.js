@@ -50,7 +50,7 @@ class ManageRestaurant extends React.Component {
          restaurant_id: this.props.restaurant.id,
          name: this.state.name,
          price: this.state.price,
-         image: `${this.state.image}.png`
+        //  image: `${this.state.image}.png`
        }
       )
     })
@@ -87,26 +87,52 @@ class ManageRestaurant extends React.Component {
       edit: true,
       editItemName: item.name,
       editItemPrice: item.price,
-      editItemImage: item.image,
+      // editItemImage: item.image,
       editItemId: item.id
     })
   }
 
+  editImage = event => { 
+    this.setState({ editItemImage: event.target.files[0] }, () => {console.log(this.state.editItemImage.name)});
+  };
+
   submitItemEdit = (item) => {
+
+    const updatedItem = new FormData()
+    updatedItem.append('name', this.state.editItemName);
+    updatedItem.append('price', this.state.editItemPrice);
+    updatedItem.append('image', this.state.editItemImage)
+
+  //   let updatedItemImage = {
+  //     'lastModified'     : this.state.editItemImage.lastModified,
+  //     'lastModifiedDate' : this.state.editItemImage.lastModifiedDate,
+  //     'name'             : this.state.editItemImage.name,
+  //     'size'             : this.state.editItemImage.size,
+  //     'type'             : this.state.editItemImage.type
+  //  }; 
+
+   
+
+  //  console.log(updatedItemImage.file)
+
+  //  let stringifiedItemImage = JSON.stringify(updatedItemImage)
+  //  console.log(stringifiedItemImage)
+
     fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
       method: 'PUT',
       headers: {
-         'Content-Type': 'application/json',
-         'Accept': 'application/json',
+        //  'Content-Type': 'application/json',
+        //  'Accept': 'application/json',
          Authorization: `Bearer ${localStorage.getItem('jwt')}`
       },
-      body: JSON.stringify(
-      {
-        name: this.state.editItemName,
-        price: this.state.editItemPrice,
-        image: this.state.editItemImage
-      }
-     )
+    //   body: JSON.stringify(
+    //   {
+    //     name: this.state.editItemName,
+    //     price: this.state.editItemPrice,
+    //     image: this.state.image
+    //   }
+    //  )
+      body: updatedItem
    })
     .then(res => res.json())
     .then(json => {
@@ -128,12 +154,13 @@ class ManageRestaurant extends React.Component {
 
    return list.map(
      item => {
+      console.log(item)
        return (
          <div>
            {!this.state.edit || this.state.editItemId != item.id ?
              <div>
                <p>Name: {item.name}</p>
-               <img src={require(`../images/restaurant${this.props.restaurant.id}/${item.image}`)} />
+               <img src={item.image.url}></img>
                <p>Price: {parseFloat(item.price)}</p>
                <button onClick={() => {this.deleteItem(item)}}> - </button>
                <button onClick={() => {this.editItem(item)}}> Edit </button>
@@ -145,7 +172,9 @@ class ManageRestaurant extends React.Component {
                Price: <input id="editItemPrice" type="integer" value={this.state.editItemPrice} onChange={event => this.handleStuff(event)}/>
                <br/>
                <br/>
-               Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/>
+               {/* Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/> */}
+               <img src={item.image.url}></img>
+               <input id="editItemImage" type="file" accept="image/*" multiple={false} onChange={this.editImage} />
                <br/>
                <br/>
                {!this.state.edit ? <button onClick={() => {this.editItem(item)}}> Edit </button> :
@@ -186,7 +215,7 @@ class ManageRestaurant extends React.Component {
               Price: <input id="price" type="integer" value={this.state.price} onChange={event => this.handleStuff(event)}/>
               <br/>
               <br/>
-              Image: <input id="image" type="text" value={this.state.image} onChange={event => this.handleStuff(event)}/>
+              {/* Image: <input id="image" type="text" value={this.state.image} onChange={event => this.handleStuff(event)}/> */}
               <br/>
               <br/>
               <button onClick={this.createMenuItem}>Add Item</button>

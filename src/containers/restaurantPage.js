@@ -48,13 +48,14 @@ class RestaurantPage extends React.Component {
   generateMenu = () => {
     console.log(this.state)
     let list = this.props.menu
+    console.log(list)
 
-    return list.map(
+    return this.props.menu.map(
       item => {
         return (
           <div>
             <p>Name: {item.name}</p>
-            <img src={require(`../images/restaurant${this.state.restaurantId}/${item.image}`)} />
+            <img src={item.image.url}></img>
             <p>Price: {parseFloat(item.price)}</p>
             {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.addToOrder(item)}}> + </button> : null}
           </div>
@@ -279,8 +280,11 @@ class RestaurantPage extends React.Component {
           {this.generateCurrentOrder()}
         </div>
         <p>Total Price: {this.state.currentOrderPrice}</p>
-        <button onClick={() => {this.inputPaymentInfo()}}>Input Payment</button>
-        <StripeContainer currentOrderPrice={this.state.currentOrderPrice} submitOrder={this.submitOrder}/>
+        {Object.keys(this.state.submittedCurrentOrder).length != 0 ?
+
+            <StripeContainer currentOrderPrice={this.state.currentOrderPrice} submitOrder={this.submitOrder}/>
+
+         : null}
       </div>
       )
     } else {
