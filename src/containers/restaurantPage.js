@@ -55,7 +55,7 @@ class RestaurantPage extends React.Component {
         return (
           <div>
             <p>Name: {item.name}</p>
-            <img src={item.image.url}></img>
+            {item.image ? <img src={item.image.url}></img> : null}
             <p>Price: {parseFloat(item.price)}</p>
             {Object.keys(this.props.restaurant).length != 0 ? <button onClick={() => {this.addToOrder(item)}}> + </button> : null}
           </div>

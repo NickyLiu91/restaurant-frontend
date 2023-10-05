@@ -99,9 +99,32 @@ class ManageRestaurant extends React.Component {
   submitItemEdit = (item) => {
 
     const updatedItem = new FormData()
-    updatedItem.append('name', this.state.editItemName);
-    updatedItem.append('price', this.state.editItemPrice);
-    updatedItem.append('image', this.state.editItemImage)
+    // updatedItem.append('menuitem', {})
+    // updatedItem.menuitem.append('name', this.state.editItemName);
+    // updatedItem.menuitem.append('price', this.state.editItemPrice);
+    // updatedItem.menuitem.append('image', this.state.editItemImage)
+
+    let data = {
+      menuitem: {
+        name: this.state.editItemName,
+        price: this.state.editItemPrice,
+        image: this.state.editItemImage
+      }
+      
+    };
+    
+    for(let dataKey in data) {
+      if(dataKey === 'menuitem') {
+        // append nested object
+        for (let menuitemKey in data[dataKey]) {
+          updatedItem.append(`menuitem[${menuitemKey}]`, data[dataKey][menuitemKey]);
+        }
+      }
+    }
+
+    // const updatedItem2 = new FormData()
+    // updatedItem2.append('menuitem', updatedItem)
+    // console.log(updatedItem2)
 
   //   let updatedItemImage = {
   //     'lastModified'     : this.state.editItemImage.lastModified,
@@ -129,10 +152,12 @@ class ManageRestaurant extends React.Component {
     //   {
     //     name: this.state.editItemName,
     //     price: this.state.editItemPrice,
-    //     image: this.state.image
+    //     image: this.state.editItemImage
     //   }
     //  )
       body: updatedItem
+      // body: {"menuitem": updatedItem}
+      
    })
     .then(res => res.json())
     .then(json => {
@@ -160,7 +185,7 @@ class ManageRestaurant extends React.Component {
            {!this.state.edit || this.state.editItemId != item.id ?
              <div>
                <p>Name: {item.name}</p>
-               <img src={item.image.url}></img>
+               {item.image ? <img src={item.image.url}></img> : null}
                <p>Price: {parseFloat(item.price)}</p>
                <button onClick={() => {this.deleteItem(item)}}> - </button>
                <button onClick={() => {this.editItem(item)}}> Edit </button>
@@ -173,7 +198,7 @@ class ManageRestaurant extends React.Component {
                <br/>
                <br/>
                {/* Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/> */}
-               <img src={item.image.url}></img>
+               {item.image ? <img src={item.image.url}></img> : null}
                <input id="editItemImage" type="file" accept="image/*" multiple={false} onChange={this.editImage} />
                <br/>
                <br/>
