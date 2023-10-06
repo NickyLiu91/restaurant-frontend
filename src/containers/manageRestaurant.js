@@ -13,7 +13,8 @@ class ManageRestaurant extends React.Component {
     editItemName: '',
     editItemPrice: '',
     editItemImage: '',
-    editItemId: ''
+    editItemId: '',
+    editedImage: false
   }
 
   // componentDidMount(){
@@ -83,30 +84,47 @@ class ManageRestaurant extends React.Component {
 
 
   editItem = (item) => {
+
+    console.log(item.image)
+
     this.setState({
       edit: true,
       editItemName: item.name,
       editItemPrice: item.price,
-      // editItemImage: item.image,
+      editItemImage: item.image,
       editItemId: item.id
     })
   }
 
   editImage = event => { 
-    this.setState({ editItemImage: event.target.files[0] }, () => {console.log(this.state.editItemImage.name)});
+    this.setState({ 
+      editItemImage: event.target.files[0],
+      editedImage: true
+    });
   };
 
   submitItemEdit = (item) => {
+    console.log(this.state)
 
-    const updatedItem = new FormData()
+    let updatedItem = new FormData()
+    let data = {}
 
-    let data = {
-      menuitem: {
-        name: this.state.editItemName,
-        price: this.state.editItemPrice,
-        image: this.state.editItemImage
-      }
-    };
+    if (this.state.editedImage) {
+      data = {
+        menuitem: {
+          name: this.state.editItemName,
+          price: this.state.editItemPrice,
+          image: this.state.editItemImage
+        }
+      };
+    } else {
+      data = {
+        menuitem: {
+          name: this.state.editItemName,
+          price: this.state.editItemPrice,
+        }
+      };
+    }
     
     for(let dataKey in data) {
       for (let menuitemKey in data[dataKey]) {
@@ -134,11 +152,11 @@ class ManageRestaurant extends React.Component {
     .then(res => res.json())
     .then(json => {
       let newMenu = this.props.menu
-      console.log(newMenu)
+      // console.log(newMenu)
       let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
-      console.log(matchingItemIndex)
+      // console.log(matchingItemIndex)
       newMenu[matchingItemIndex] = json
-      console.log(newMenu)
+      // console.log(newMenu)
 
       this.props.changeMenu(newMenu)
       this.cancelEdit()
