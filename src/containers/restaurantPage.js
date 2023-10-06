@@ -116,6 +116,7 @@ class RestaurantPage extends React.Component {
 
     return list.map(
       orderItem => {
+        console.log(orderItem)
         return (
           <OrderItem key={orderItem.id} order={order} orderItem={orderItem} removeOrderItem={this.removeOrderItem} changeOrderItemStatus={this.changeOrderItemStatus}/>
         )
@@ -128,6 +129,7 @@ class RestaurantPage extends React.Component {
 
     return list.map(
       order => {
+        console.log(order)
         return (
           <div className="order">
             <p>ID: {order.id}</p>
@@ -171,7 +173,7 @@ class RestaurantPage extends React.Component {
 
   submitOrder = () => {
 
-    let currentOrderCopy = this.state.currentOrder
+    let currentOrderCopy = [...this.state.currentOrder]
     // let currentPrice = 0
 
     // currentOrderCopy.forEach(item => {currentPrice += parseFloat(item.price)})
@@ -233,11 +235,16 @@ class RestaurantPage extends React.Component {
     })
     .then(res => res.json())
     .then(json => {
-      let currentOrders = this.props.orders
+      let currentOrders = [...this.props.orders]
+      // console.log(currentOrders)
 
       let matchingOrderIndex = currentOrders.findIndex(existingOrder => existingOrder.id == json.id)
+      // console.log(matchingOrderIndex)
       currentOrders[matchingOrderIndex] = json
+      // console.log(currentOrders[matchingOrderIndex])
+      // console.log(json)
       this.props.changeOrders(currentOrders)
+      console.log(this.props.orders[3].orderItems[2])
 
     })
   }
