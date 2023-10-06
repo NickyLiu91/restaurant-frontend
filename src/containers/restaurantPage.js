@@ -280,11 +280,12 @@ class RestaurantPage extends React.Component {
           {this.generateCurrentOrder()}
         </div>
         <p>Total Price: {this.state.currentOrderPrice}</p>
-        {Object.keys(this.state.submittedCurrentOrder).length != 0 ?
+        
+        {(Object.keys(this.state.currentOrder).length != 0 && this.props.location == 'online')?
 
             <StripeContainer currentOrderPrice={this.state.currentOrderPrice} submitOrder={this.submitOrder}/>
 
-         : null}
+         : <button onClick={() => {this.submitOrder()}}>Submit Order</button>}
       </div>
       )
     } else {

@@ -222,7 +222,6 @@ class ManageRestaurant extends React.Component {
               <div>
               <h1>MENU</h1>
                 {this.generateMenu()}
-                <button onClick={() => {this.submitOrder()}}>Submit Order</button>
               </div>
               Name: <input id="name" type="text" value={this.state.name} onChange={event => this.handleStuff(event)}/>
               <br/>
