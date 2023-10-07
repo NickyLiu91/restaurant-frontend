@@ -236,16 +236,10 @@ class RestaurantPage extends React.Component {
     .then(res => res.json())
     .then(json => {
       let currentOrders = [...this.props.orders]
-      // console.log(currentOrders)
 
       let matchingOrderIndex = currentOrders.findIndex(existingOrder => existingOrder.id == json.id)
-      // console.log(matchingOrderIndex)
       currentOrders[matchingOrderIndex] = json
-      // console.log(currentOrders[matchingOrderIndex])
-      // console.log(json)
       this.props.changeOrders(currentOrders)
-      console.log(this.props.orders[3].orderItems[2])
-
     })
   }
 

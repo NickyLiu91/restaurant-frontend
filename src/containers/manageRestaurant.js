@@ -14,7 +14,7 @@ class ManageRestaurant extends React.Component {
     editItemPrice: '',
     editItemImage: '',
     editItemId: '',
-    editedImage: false
+    editImageStatus: "None"
   }
 
   // componentDidMount(){
@@ -99,7 +99,13 @@ class ManageRestaurant extends React.Component {
   editImage = event => { 
     this.setState({ 
       editItemImage: event.target.files[0],
-      editedImage: true
+      editImageStatus: "Change"
+    });
+  };
+
+  removeImage = event => { 
+    this.setState({ 
+      editImageStatus: "Remove"
     });
   };
 
@@ -109,12 +115,20 @@ class ManageRestaurant extends React.Component {
     let updatedItem = new FormData()
     let data = {}
 
-    if (this.state.editedImage) {
+    if (this.state.editImageStatus == 'Change') {
       data = {
         menuitem: {
           name: this.state.editItemName,
           price: this.state.editItemPrice,
           image: this.state.editItemImage
+        }
+      };
+    } else if (this.state.editImageStatus == 'Remove') {
+      data = {
+        menuitem: {
+          name: this.state.editItemName,
+          price: this.state.editItemPrice,
+          image: null
         }
       };
     } else {
@@ -165,7 +179,6 @@ class ManageRestaurant extends React.Component {
 
  generateMenu = () => {
    let list = this.props.menu
-   console.log(list)
 
    return list.map(
      item => {
@@ -189,7 +202,15 @@ class ManageRestaurant extends React.Component {
                <br/>
                {/* Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/> */}
                {item.image ? <img src={item.image.url}></img> : null}
-               <input id="editItemImage" type="file" accept="image/*" multiple={false} onChange={this.editImage} />
+               <div id="imgDiv">
+                <p>Change Image</p>
+
+                <br/>
+                <input id="editItemImage" type="file" accept="image/*" multiple={false} onChange={this.editImage} />
+                <br/>
+                <button onClick={this.removeImage}>Remove Image</button>
+               </div>
+               
                <br/>
                <br/>
                {!this.state.edit ? <button onClick={() => {this.editItem(item)}}> Edit </button> :
@@ -210,7 +231,8 @@ class ManageRestaurant extends React.Component {
      editItemName: '',
      editItemPrice: '',
      editItemImage: '',
-     editItemId: ''
+     editItemId: '',
+     editImageStatus: 'None'
    })
  }
 
