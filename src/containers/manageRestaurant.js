@@ -128,7 +128,7 @@ class ManageRestaurant extends React.Component {
         menuitem: {
           name: this.state.editItemName,
           price: this.state.editItemPrice,
-          image: null
+          editImageStatus: this.state.editImageStatus
         }
       };
     } else {
@@ -146,35 +146,50 @@ class ManageRestaurant extends React.Component {
       }
     }
 
-    fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
-      method: 'PUT',
-      headers: {
-        //  'Content-Type': 'application/json',
-        //  'Accept': 'application/json',
-         Authorization: `Bearer ${localStorage.getItem('jwt')}`
-      },
-    //   body: JSON.stringify(
-    //   {
-    //     name: this.state.editItemName,
-    //     price: this.state.editItemPrice,
-    //     image: this.state.editItemImage
-    //   }
-    //  )
-      body: updatedItem
-      
-   })
-    .then(res => res.json())
-    .then(json => {
-      let newMenu = this.props.menu
-      // console.log(newMenu)
-      let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
-      // console.log(matchingItemIndex)
-      newMenu[matchingItemIndex] = json
-      // console.log(newMenu)
+      console.log("???????????")
+    if (this.state.editImageStatus == 'Remove') {
+      fetch(`http://localhost:3000/api/menuitems/${item.id}/removeImage`, {
+        method: 'PUT',
+        headers: {
+           Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        },
+        body: updatedItem  
+      })
+      .then(res => res.json())
+      .then(json => {
+        let newMenu = this.props.menu
+        // console.log(newMenu)
+        let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+        // console.log(matchingItemIndex)
+        newMenu[matchingItemIndex] = json
+        // console.log(newMenu)
 
-      this.props.changeMenu(newMenu)
-      this.cancelEdit()
-    })
+        this.props.changeMenu(newMenu)
+        this.cancelEdit()
+      })
+    } else {
+      fetch(`http://localhost:3000/api/menuitems/${item.id}`, {
+        method: 'PUT',
+        headers: {
+          //  'Content-Type': 'application/json',
+          //  'Accept': 'application/json',
+           Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        },
+        body: updatedItem  
+      })
+      .then(res => res.json())
+      .then(json => {
+        let newMenu = this.props.menu
+        // console.log(newMenu)
+        let matchingItemIndex = this.props.menu.findIndex(menuItem => menuItem.id == item.id)
+        // console.log(matchingItemIndex)
+        newMenu[matchingItemIndex] = json
+        // console.log(newMenu)
+
+        this.props.changeMenu(newMenu)
+        this.cancelEdit()
+      })
+    }
   }
 
  generateMenu = () => {
@@ -190,7 +205,6 @@ class ManageRestaurant extends React.Component {
                <p>Name: {item.name}</p>
                {item.image ? <img src={item.image.url}></img> : null}
                <p>Price: {parseFloat(item.price)}</p>
-               <button onClick={() => {this.deleteItem(item)}}> - </button>
                <button onClick={() => {this.editItem(item)}}> Edit </button>
              </div> :
              <div>
