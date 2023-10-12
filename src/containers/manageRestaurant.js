@@ -146,7 +146,6 @@ class ManageRestaurant extends React.Component {
       }
     }
 
-      console.log("???????????")
     if (this.state.editImageStatus == 'Remove') {
       fetch(`http://localhost:3000/api/menuitems/${item.id}/removeImage`, {
         method: 'PUT',
@@ -214,8 +213,8 @@ class ManageRestaurant extends React.Component {
                Price: <input id="editItemPrice" type="integer" value={this.state.editItemPrice} onChange={event => this.handleStuff(event)}/>
                <br/>
                <br/>
-               {/* Image: <input id="editItemImage" type="text" value={this.state.editItemImage} onChange={event => this.handleStuff(event)}/> */}
-               {item.image ? <img src={item.image.url}></img> : null}
+               {/* <button onClick={() => {console.log(item, this.state)}}>PRINT</button> */}
+               {item.image && this.state.editImageStatus != 'Remove' ? <img src={item.image.url}></img> : null}
                <div id="imgDiv">
                 <p>Change Image</p>
 
